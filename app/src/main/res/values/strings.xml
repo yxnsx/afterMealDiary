@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">after Meal Diary</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_mypage">My page</string>
+    <string name="after_meal_diary">after meal diary</string>
+</resources>
+
+
