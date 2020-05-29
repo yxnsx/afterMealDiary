@@ -15,6 +15,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     TextView textView_menuPicker;
     TextView textView_alarm;
+    TextView textView_nutrientInfo;
     TextView textView_sendOpinion;
     TextView textView_setting;
 
@@ -34,6 +35,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
+        textView_nutrientInfo = findViewById(R.id.textView_nutrientInfo);
         textView_sendOpinion = findViewById(R.id.textView_sendOpinion);
         textView_setting = findViewById(R.id.textView_setting);
 
@@ -44,6 +46,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         textView_menuPicker.setOnClickListener(this);
         textView_alarm.setOnClickListener(this);
+        textView_nutrientInfo.setOnClickListener(this);
         textView_sendOpinion.setOnClickListener(this);
         textView_setting.setOnClickListener(this);
 
