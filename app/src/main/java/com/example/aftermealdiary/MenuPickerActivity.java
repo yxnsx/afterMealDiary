@@ -2,7 +2,6 @@ package com.example.aftermealdiary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -30,7 +29,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
     TextView textView_menuPickerInfo;
     TextView textView_menuInfo;
     TextView textView_additionalInfo;
-    LottieAnimationView lottie_confettie;
+    LottieAnimationView lottie_confetti;
 
     ArrayList<MenuData> menuDataArrayList;
     MenuPickerTask menuPickerTask;
@@ -53,7 +52,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         textView_menuPickerInfo = findViewById(R.id.textView_menuPickerInfo);
         textView_menuInfo = findViewById(R.id.textView_menuInfo);
         textView_additionalInfo = findViewById(R.id.textView_additionalInfo);
-        lottie_confettie = findViewById(R.id.lottie_confettie);
+        lottie_confetti = findViewById(R.id.lottie_confettie);
 
         // 클릭리스너 설정
         imageButton_backArrow.setOnClickListener(this);
@@ -98,8 +97,8 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
                 // AsyncTask가 생성된 상태일 경우
                 if (menuPickerTask != null) {
                     isRunning = false;
-                    lottie_confettie.setAnimation("confetti.json");
-                    lottie_confettie.playAnimation();
+                    lottie_confetti.setAnimation("confetti.json");
+                    lottie_confetti.playAnimation();
                     menuPickerTask.cancel(true);
 
                 } else { // AsyncTask가 null일 경우
