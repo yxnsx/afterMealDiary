@@ -69,16 +69,16 @@
             android:textColor="@color/colorPrimary" />
 
         <Button
-            android:id="@+id/button_myPage"
+            android:id="@+id/button_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorWhite"
-            android:drawableTop="@drawable/ic_person_24dp"
+            android:drawableTop="@drawable/ic_settings_24dp"
             android:drawablePadding="-12dp"
             android:fontFamily="@font/spoqa_han_sans_regular"
             android:paddingTop="12dp"
-            android:text="마이페이지"
+            android:text="설정"
             android:textColor="@color/colorTransparentBlack" />
 
     </LinearLayout>

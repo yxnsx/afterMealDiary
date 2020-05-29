@@ -61,6 +61,18 @@
         app:layout_constraintStart_toStartOf="@+id/textView_loginInfo"
         app:layout_constraintTop_toBottomOf="@+id/editText_email" />
 
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:text="로그인 유지"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_password" />
+
     <Button
         android:id="@+id/button_login"
         android:layout_width="match_parent"
@@ -78,7 +90,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_password" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
     <TextView
         android:id="@+id/textView_signUp"
@@ -91,7 +103,7 @@
         android:layout_marginRight="32dp"
         android:fontFamily="@font/spoqa_han_sans_regular"
         android:gravity="center"
-        android:text="계정 생성하기"
+        android:text="게정 생성하기"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="15sp"

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +14,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     TextView toolbar_title;
     Button button_home;
     Button button_calendar;
-    Button button_myPage;
+    Button button_setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +25,12 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         toolbar_title = findViewById(R.id.textView_postTitle);
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
-        button_myPage = findViewById(R.id.button_myPage);
+        button_setting = findViewById(R.id.button_setting);
 
         // 클릭리스너 설정
         button_home.setOnClickListener(this);
         button_calendar.setOnClickListener(this);
-        button_myPage.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
     }
 
     @Override
@@ -82,8 +80,8 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             // 마이페이지 버튼을 클릭했을 경우
-            case R.id.button_myPage:
-                Intent toMyPage = new Intent(v.getContext(), MyPageActivity.class);
+            case R.id.button_setting:
+                Intent toMyPage = new Intent(v.getContext(), SettingActivity.class);
                 startActivity(toMyPage);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);

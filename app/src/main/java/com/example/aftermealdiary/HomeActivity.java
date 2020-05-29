@@ -36,7 +36,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView;
     HomeListAdapter homeListAdapter;
     LinearLayoutManager layoutManager;
-
     ArrayList<PostData> postDataArrayList;
 
     ConstraintLayout banner;
@@ -46,7 +45,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView textView_bannerTitle;
     Thread bannerThread;
 
-    int bannerCount = 0;
+    int index = 0;
     String bannerInfo;
     boolean isHome;
     public static final int SEND_BANNERDATA = 0;
@@ -54,20 +53,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     Button button_home;
     Button button_calendar;
-    Button button_myPage;
-
-    ImageView imageView_postImage;
-    TextView textView_date;
-    TextView textView_title;
-
-
+    Button button_setting;
     FloatingActionButton floatingActionButton_write;
 
     long pressedTime = 0;
 
 
-    // 레이아웃 리소스 파일 세팅과 변수 초기화 작업 수행
-    @Override
+    @Override // 레이아웃 리소스 파일 세팅과 변수 초기화 작업 수행
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -81,23 +73,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
-        button_myPage = findViewById(R.id.button_myPage);
-        imageView_postImage = findViewById(R.id.imageView_addImage);
-        textView_date = findViewById(R.id.textView_postDate);
-        textView_title = findViewById(R.id.textView_postTitle);
+        button_setting = findViewById(R.id.button_setting);
         floatingActionButton_write = findViewById(R.id.floatingActionButton_write);
 
         // 클릭리스너 설정
         banner.setOnClickListener(this);
         button_home.setOnClickListener(this);
         button_calendar.setOnClickListener(this);
-        button_myPage.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
         floatingActionButton_write.setOnClickListener(this);
     }
 
 
-    // 앱이 UI를 관리하는 코드 초기화
-    @Override
+    @Override // 앱이 UI를 관리하는 코드 초기화
     protected void onStart() {
 
         super.onStart();
@@ -116,14 +104,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         // [리사이클러뷰] postDataArrayList 값 가져오기
         postDataArrayList = new ArrayList<>();
+
         try {
             postDataArrayList = PostData.getArrayListFromSharedPreferences(this);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.d("디버깅", "HomeActivity - onResume(): postDataArrayList.size() = " + postDataArrayList.size());
 
         // [리사이클러뷰] 레이아웃매니저, 어댑터 설정
         layoutManager = new LinearLayoutManager(this);
@@ -135,16 +122,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(homeListAdapter);
         recyclerView.setLayoutManager(layoutManager);
 
-        // 리사이클러뷰 스크롤 상태 불러오기
+        // [리사이클러뷰] 스크롤 상태 불러오기
         if (recyclerViewState != null) {
             layoutManager.onRestoreInstanceState(recyclerViewState);
         } else {
             Log.d("디버깅", "HomeActivity - onResume(): 리사이클러뷰 스크롤 상태 null");
         }
 
+        // 배너 핸들러 상태를 제어하기 위한 boolean 값
         isHome = true;
+
+        // 배너에 사용할 배너 어레이리스트 값 설정
         setBannerArrayList();
 
+        // 배너 스레드 시작
         bannerThread = new Thread();
         bannerThread.start();
     }
@@ -158,6 +149,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         Log.d("디버깅", "HomeActivity - onPause(): ");
 
+        // 핸들러 정지
         bannerHandler.sendEmptyMessage(SEND_STOP);
     }
 
@@ -188,24 +180,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.banner:
 
+                // "요즘 뜨는 맛집들" 배너 클릭시
                 if(bannerInfo.equals("search")){
-                    Intent intentSearch = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=맛집"));
+
+                    // 네이버에서 '맛집' 키워드로 검색
+                    Intent intentSearch = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=내+주변+맛집"));
                     startActivity(intentSearch);
 
-                    Log.d("디버깅", "HomeActivity - onClick(): search 클릭됨");
-
+                // "오늘 먹을 메뉴가 고민이라면" 배너 클릭시
                 } else if (bannerInfo.equals("mealPicker")) {
+
+                    // 메뉴 룰렛 액티비티로 이동
                     Intent intentMealPicker = new Intent(getApplicationContext(), MenuPickerActivity.class);
                     intentMealPicker.putExtra("intentFrom", "home");
                     startActivity(intentMealPicker);
 
-                    Log.d("디버깅", "HomeActivity - onClick(): mealPicker 클릭됨");
-
+                // "간단 요리 레시피" 배너 클릭시
                 } else if (bannerInfo.equals("recipes")) {
+
+                    // 네이버에서 '집에서 간단한 요리' 키워드로 검색
                     Intent intentRecipes = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.search.naver.com/search.naver?sm=mtb_sug.top&where=m&oquery=맛집&tqi=UV1dNlp0JxossK%2Fxm14ssssss5h-227868&query=집에서+간단한+요리&acq=간단한&acr=1&qdt=0"));
                     startActivity(intentRecipes);
-
-                    Log.d("디버깅", "HomeActivity - onClick(): recipes 클릭됨");
 
                 } else {
                     Log.d("디버깅", "HomeActivity - onClick(): banner error");
@@ -230,9 +225,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 bannerHandler.sendEmptyMessage(SEND_STOP);
                 break;
 
-            // 마이페이지 버튼을 클릭했을 경우
-            case R.id.button_myPage:
-                Intent intentMypage = new Intent(this, MyPageActivity.class);
+            // 세팅 버튼을 클릭했을 경우
+            case R.id.button_setting:
+                Intent intentMypage = new Intent(this, SettingActivity.class);
                 startActivity(intentMypage);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
@@ -316,7 +311,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         bannerDataArrayList.add(new BannerData // 녹색, 주황색 배너
                 (Color.parseColor("#003205"), Color.parseColor("#FF6000"), "요즘 뜨는 맛집들", "search"));
         bannerDataArrayList.add(new BannerData // 녹색, 노란색 배너
-                (Color.parseColor("#003205"), Color.parseColor("#FFA700"), "오늘은 뭐먹지?", "mealPicker"));
+                (Color.parseColor("#003205"), Color.parseColor("#FFA700"), "오늘의 메뉴가 고민이라면", "mealPicker"));
         bannerDataArrayList.add(new BannerData // 녹색, 연두색 배너
                 (Color.parseColor("#003205"), Color.parseColor("#B7C500"), "간단 요리 레시피", "recipes"));
 
@@ -327,16 +322,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     final Handler bannerHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+
             switch (msg.what) {
 
                 case SEND_BANNERDATA:
+
+                    // Thread에서 변화하는 bannerCount 값 바탕으로 배너 리소스 설정
                     imageView_bannerBackground.setBackgroundColor
-                            (bannerDataArrayList.get(bannerCount).getBackgroundColor());
+                            (bannerDataArrayList.get(index).getBackgroundColor());
                     imageView_bannerCircle.setColorFilter
-                            (bannerDataArrayList.get(bannerCount).getCircleColor());
+                            (bannerDataArrayList.get(index).getCircleColor());
                     textView_bannerTitle.setText
-                            (bannerDataArrayList.get(bannerCount).getTitle());
-                    bannerInfo = bannerDataArrayList.get(bannerCount).getInfo();
+                            (bannerDataArrayList.get(index).getTitle());
+                    bannerInfo = bannerDataArrayList.get(index).getInfo();
+
                     break;
 
                 case SEND_STOP:
@@ -358,24 +357,29 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void run() {
             super.run();
+
             while (isHome) {
-                if (bannerCount < bannerDataArrayList.size()) {
-                    // 메시지 얻어오기
+
+                if (index < bannerDataArrayList.size()) {
+
+                    // 메시지 객체 생성
                     Message message = bannerHandler.obtainMessage();
-                    // 메시지 ID 설정
+
+                    // 메시지 ID, 내용 설정 후 핸들러로 메시지 보내기
                     message.what = SEND_BANNERDATA;
-                    // 메시지 내용 설정
-                    message.obj = bannerDataArrayList.get(bannerCount);
-                    // 메시지 전
+                    message.obj = bannerDataArrayList.get(index);
                     bannerHandler.sendMessage(message);
-                    try {
-                        sleep(5000);
-                        bannerCount++;
+
+                    try { // 3초에 한 번 배너 바뀌도록 설정
+                        sleep(3000);
+                        Log.d("디버깅", "Thread - run(): " + textView_bannerTitle.getText());
+                        index++;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    bannerCount = 0;
+
+                } else { // bannerCount를 0으로 초기화해서 다시 while문 돌 수 있도록 함
+                    index = 0;
                 }
             }
         }

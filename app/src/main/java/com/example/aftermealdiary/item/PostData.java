@@ -155,7 +155,6 @@ public class PostData implements Parcelable {
             Log.d("디버깅", "PostData - getDateSharedPreferences(): " + postDate);
 
             if(selectedDate.equals(postDate)) {
-                // TODO 여기서 배열 인덱스값 받아서 저장한 후 캘린더리스트에서 수정 삭제시 활용할 수 있도록..
                 PostData postData = new PostData(postImage, postDate, postTitle, postText, index);
                 postDataForCalendar.add(postData);
             } else {

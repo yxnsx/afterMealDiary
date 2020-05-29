@@ -18,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AlarmActivity"></activity>
+
+        <receiver android:name=".AlarmNotification" />
+
         <!-- 스플래시 액티비티 -->
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -26,7 +28,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 홈 액티비티 -->
+        </activity>
+        <!-- 홈 액티비티 -->
         <activity
             android:name=".HomeActivity"
             android:exported="true"
@@ -34,56 +37,64 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 캘린더 액티비티 -->
+        </activity>
+        <!-- 캘린더 액티비티 -->
         <activity
             android:name=".CalendarActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 마이페이지 액티비티 -->
+        </activity>
+        <!-- 마이페이지 액티비티 -->
         <activity
-            android:name=".MyPageActivity"
+            android:name=".SettingActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 글 보기 액티비티 -->
+        </activity>
+        <!-- 글 보기 액티비티 -->
         <activity
             android:name=".PostActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 글 작성 액티비티 -->
+        </activity>
+        <!-- 글 작성 액티비티 -->
         <activity
             android:name=".WriteActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 글 수정 액티비티 -->
+        </activity>
+        <!-- 글 수정 액티비티 -->
         <activity
             android:name=".EditActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 로그인 액티비티 -->
+        </activity>
+        <!-- 로그인 액티비티 -->
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 계정생성 액티비티 -->
+        </activity>
+        <!-- 계정생성 액티비티 -->
         <activity
             android:name=".SignUpActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 캘린더 리스트 액티비티 -->
+        </activity>
+        <!-- 캘린더 리스트 액티비티 -->
         <activity
             android:name=".CalendarListActivity"
             android:launchMode="singleTop">
@@ -91,8 +102,13 @@
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
         </activity>
+        <!-- 메뉴 룰렛 액티비티 -->
         <activity
             android:name=".MenuPickerActivity"
+            android:launchMode="singleTop" />
+        <!-- 알람 액티비티 -->
+        <activity
+            android:name=".AlarmActivity"
             android:launchMode="singleTop" />
     </application>
 

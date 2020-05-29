@@ -2,6 +2,7 @@ package com.example.aftermealdiary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.aftermealdiary.item.MenuData;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
     TextView textView_menuPickerInfo;
     TextView textView_menuInfo;
     TextView textView_additionalInfo;
+    LottieAnimationView lottie_confettie;
 
     ArrayList<MenuData> menuDataArrayList;
     MenuPickerTask menuPickerTask;
@@ -50,13 +53,17 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         textView_menuPickerInfo = findViewById(R.id.textView_menuPickerInfo);
         textView_menuInfo = findViewById(R.id.textView_menuInfo);
         textView_additionalInfo = findViewById(R.id.textView_additionalInfo);
+        lottie_confettie = findViewById(R.id.lottie_confettie);
 
         // 클릭리스너 설정
         imageButton_backArrow.setOnClickListener(this);
         button_startPicker.setOnClickListener(this);
         button_stopPicker.setOnClickListener(this);
 
+        // AsyncTask 상태를 제어하기 위한 boolean 값
         isRunning = false;
+
+        // 메뉴 룰렛에 사용할 메뉴 어레이리스트 값 설정
         setMenuDataArrayList();
 
         // 넘어온 인텐트 출처 받아오기
@@ -65,32 +72,37 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         } else {
             Log.d("디버깅", "PostActivity - onCreate(): getIntent == null");
         }
-
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
+
             case R.id.imageButton_backArrow:
                 onBackPressed();
-
-                if (menuPickerTask != null) {
-                    isRunning = false;
-                    menuPickerTask.cancel(true);
-                }
                 break;
 
             case R.id.button_startPicker:
+
+                // AsyncTask 상태를 제어하기 위한 boolean 값
                 isRunning = true;
+
+                // 새로운 AsyncTask 생성 후 실행
                 menuPickerTask = new MenuPickerTask();
                 menuPickerTask.execute();
                 break;
 
             case R.id.button_stopPicker:
+
+                // AsyncTask가 생성된 상태일 경우
                 if (menuPickerTask != null) {
                     isRunning = false;
+                    lottie_confettie.setAnimation("confetti.json");
+                    lottie_confettie.playAnimation();
                     menuPickerTask.cancel(true);
-                } else {
+
+                } else { // AsyncTask가 null일 경우
                     Toast.makeText(this, "룰렛 시작하기 버튼을 먼저 눌러주세요", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -105,6 +117,14 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
     public void onBackPressed() {
         super.onBackPressed();
 
+        // AsyncTask가 생성된 상태일 경우
+        if (menuPickerTask != null) {
+
+            // AsyncTask 상태를 제어하기 위한 boolean 값
+            isRunning = false;
+            menuPickerTask.cancel(true);
+        }
+
         // 넘어온 인텐트의 출처가 홈 액티비티인 경우
         if (intentFrom.equals("home")) {
 
@@ -112,11 +132,11 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
             Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intentHome);
 
-            // 넘어온 인텐트의 출처가 마이페이지 액티비티인 경우
-        } else if (intentFrom.equals("mypage")) {
+        // 넘어온 인텐트의 출처가 설정 액티비티인 경우
+        } else if (intentFrom.equals("setting")) {
 
-            // 마이페이지로 되돌아가는 인텐트 설정
-            Intent intentMypage = new Intent(getApplicationContext(), MyPageActivity.class);
+            // 설정으로 되돌아가는 인텐트 설정
+            Intent intentMypage = new Intent(getApplicationContext(), SettingActivity.class);
             startActivity(intentMypage);
 
         } else {
@@ -127,6 +147,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
     public void setMenuDataArrayList() {
         menuDataArrayList = new ArrayList<>();
 
+        // Drawable 이미지 가져오기
         Drawable icon_curry_128 = getResources().getDrawable(R.drawable.icon_curry_128);
         Drawable icon_hotpot_128 = getResources().getDrawable(R.drawable.icon_hotpot_128);
         Drawable icon_spaghetii_128 = getResources().getDrawable(R.drawable.icon_spaghetii_128);
@@ -135,6 +156,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         Drawable icon_sandwich_128 = getResources().getDrawable(R.drawable.icon_sandwich_128);
         Drawable icon_sushi_128 = getResources().getDrawable(R.drawable.icon_sushi_128);
 
+        // menuDataArrayList에 각 MenuData 객체 추가
         menuDataArrayList.add(new MenuData(icon_curry_128, "오늘은", "든든한 덮밥류", "어떠신가요?"));
         menuDataArrayList.add(new MenuData(icon_hotpot_128, "오늘은", "든든한 찌개류", "어떠신가요?"));
         menuDataArrayList.add(new MenuData(icon_spaghetii_128, "오늘은", "든든한 스파게티", "어떠신가요?"));
@@ -156,19 +178,18 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
 
         @Override // 스레드의 백그라운드 작업 구현
         protected MenuData doInBackground(Integer... integers) {
+
             while (index < menuDataArrayList.size()) {
+
                 try {
-                    // publishProgress()는 onProgressUpdate()를 호출
-                    // 백그라운드 스레드 작업을 실행함과 동시에 UI 업데이트
-                    publishProgress(menuDataArrayList.get(index));
-
-                    index++;
-                    Log.d("디버깅", "MenuPickerTask - doInBackground(): index = " + index);
-
                     synchronized (this) {
+                        // onProgressUpdate로 넘겨줄 값 설정
+                        publishProgress(menuDataArrayList.get(index));
+
+                        // 인덱스 값을 100 밀리세컨즈마다 증가시켜 보여지는 데이터가 바뀌도록 설정
+                        index++;
                         this.wait(100);
                     }
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -185,6 +206,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         protected void onProgressUpdate(MenuData... values) {
             super.onProgressUpdate(values);
 
+            // 얻은 데이터 바탕으로 레이아웃 리소스 재설정
             imageView_menuImage.setBackground(values[0].getMenuIcon());
             textView_menuPickerInfo.setText(values[0].getPickerInfo());
             textView_menuInfo.setText(values[0].getMenuName());
@@ -196,20 +218,6 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         @Override
         protected void onPostExecute(MenuData menuData) {
             super.onPostExecute(menuData);
-
-            imageView_menuImage.setBackground(menuData.getMenuIcon());
-            textView_menuPickerInfo.setText(menuData.getPickerInfo());
-            textView_menuInfo.setText(menuData.getMenuName());
-            textView_additionalInfo.setText(menuData.getAdditionalInfo());
-
-            Log.d("디버깅", "MenuPickerTask - onPostExecute(): " + menuData.getMenuName());
-
-        }
-
-        @Override
-        protected void onCancelled(MenuData menuData) {
-            super.onCancelled(menuData);
-            Log.d("디버깅", "MenuPickerTask - onCancelled(): 호출됨");
         }
     }
 }

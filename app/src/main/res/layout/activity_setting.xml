@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container">
 
         <TextView
-            android:id="@+id/textView_userInfo"
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -51,7 +51,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:fontFamily="@font/spoqa_han_sans_bold"
-            android:text="로그인된 \n계정 정보가 없습니다."
+            android:text="메뉴 룰렛으로 \n오늘의 식사를 정해보세요!"
             android:textSize="21sp"
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,61 +59,24 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/textView_login"
+            android:id="@+id/textView_menuPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/spoqa_han_sans_regular"
-            android:text="> 로그인/계정생성"
+            android:text="> 메뉴 룰렛"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_userInfo" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <TextView
-            android:id="@+id/textView_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/spoqa_han_sans_regular"
-            android:text="> 로그아웃"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_userInfo" />
 
         <ImageView
             android:id="@+id/imageView_border_01"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginTop="32dp"
-            android:background="@color/colorTransparentBlack"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_login" />
-
-        <TextView
-            android:id="@+id/textView_menuPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:text="메뉴 룰렛"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_border_01" />
-
-        <ImageView
-            android:id="@+id/imageView_border_02"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="16dp"
             android:background="@color/colorTransparentBlack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -132,10 +95,10 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_border_02" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView_border_01" />
 
         <ImageView
-            android:id="@+id/imageView_border_03"
+            android:id="@+id/imageView_border_02"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="16dp"
@@ -157,10 +120,10 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView_border_03" />
+            app:layout_constraintTop_toTopOf="@+id/imageView_border_02" />
 
         <ImageView
-            android:id="@+id/imageView_border_04"
+            android:id="@+id/imageView_border_03"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="16dp"
@@ -182,7 +145,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView_border_04" />
+            app:layout_constraintTop_toTopOf="@+id/imageView_border_03" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -237,14 +200,14 @@
             />
 
         <Button
-            android:id="@+id/button_myPage"
+            android:id="@+id/button_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorWhite"
-            android:drawableTop="@drawable/ic_person_24dp_selected"
+            android:drawableTop="@drawable/ic_settings_24dp_selected"
             android:drawablePadding="-12dp"
-            android:text="마이페이지"
+            android:text="설정"
             android:textColor="@color/colorPrimary"
             android:fontFamily="@font/spoqa_han_sans_regular"
             android:paddingTop="12dp"
