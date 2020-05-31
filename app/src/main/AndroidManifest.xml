@@ -20,7 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <receiver
+            android:name=".LocationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
         <receiver android:name=".AlarmNotification" /> <!-- 스플래시 액티비티 -->
         <activity android:name=".SplashActivity">
             <intent-filter>
