@@ -1,6 +1,7 @@
 package com.example.aftermealdiary;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -204,6 +205,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         locationRequest.setInterval(MINIMUM_UPDATE_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setMaxWaitTime(MINIMUM_UPDATE_INTERVAL * 5);
+    }
+
+    private PendingIntent getPendingIntent() {
+        Intent intent = new Intent(this, LocationBroadcastReceiver.class);
+        intent.setAction(LocationBroadcastReceiver.ACTION_PROCESS_UPDATES);
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     
