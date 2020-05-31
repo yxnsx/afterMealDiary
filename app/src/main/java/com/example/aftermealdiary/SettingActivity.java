@@ -1,6 +1,7 @@
 package com.example.aftermealdiary;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -13,8 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
@@ -200,7 +204,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
                 } else { // 퍼미션 요청 거절시
                     // 퍼미션 재요청
-
+                    requestLocationPermission();
                 }
 
             }
@@ -221,6 +225,40 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
         return location;
+    }
+
+    public void requestLocationPermission() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+            // 다이얼로그 설정
+            new AlertDialog.Builder(this)
+                    .setTitle("접근 권한 설정")
+                    .setMessage("날씨 정보를 사용하기 위해서는 위치 접근 권한이 필요합니다.")
+
+                    // 권한 허용 버튼 클릭시
+                    .setPositiveButton("허용", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 퍼미션 창 보여주기
+                            ActivityCompat.requestPermissions(SettingActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_LOCATION);
+                        }
+                    })
+
+                    // 권한 거부 버튼 클릭시
+                    .setNegativeButton("거부", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 토스트 메시지 출력 후 다이얼로그 종료
+                            Toast.makeText(SettingActivity.this, "권한이 거부되었습니다", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+        } else { // TODO 이 부분 알아보기
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_LOCATION);
+        }
     }
 
 
