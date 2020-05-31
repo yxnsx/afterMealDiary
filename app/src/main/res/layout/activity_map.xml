@@ -30,6 +30,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout_snackBarHolder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_mapView"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_mapView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
+
     <fragment
         android:id="@+id/fragment_mapView"
         android:name="com.google.android.gms.maps.SupportMapFragment"

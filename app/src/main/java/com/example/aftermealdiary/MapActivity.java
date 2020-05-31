@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -31,6 +32,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     Button button_map;
     Button button_setting;
     Fragment fragment_mapView;
+    CoordinatorLayout coordinatorLayout_snackBarHolder;
 
     private GoogleMap googleMap;
     int PERMISSION_LOCATION = 30;
@@ -46,6 +48,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         button_calendar = findViewById(R.id.button_calendar);
         button_map = findViewById(R.id.button_map);
         button_setting = findViewById(R.id.button_setting);
+        coordinatorLayout_snackBarHolder = findViewById(R.id.coordinatorLayout_snackBarHolder);
 
         // 클릭리스너 설정
         button_home.setOnClickListener(this);
@@ -151,7 +154,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
         if (shouldProvideRationale) {
             Snackbar.make(
-                    coordinatorLayout_mainLayout,
+                    coordinatorLayout_snackBarHolder,
                     "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
                     Snackbar.LENGTH_INDEFINITE)
                     .setAction("허용", new View.OnClickListener() {
@@ -191,7 +194,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
             } else {
                 Snackbar.make(
-                        coordinatorLayout_mainLayout,
+                        coordinatorLayout_snackBarHolder,
                         "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
                         Snackbar.LENGTH_INDEFINITE)
                         .setAction("설정", new View.OnClickListener() {
