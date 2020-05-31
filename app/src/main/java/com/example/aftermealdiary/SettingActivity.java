@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,8 +20,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
-public class SettingActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
+
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView textView_menuPicker;
     TextView textView_alarm;
@@ -50,6 +53,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     String weatherApiKey = "6c0499aec54f347ed22ed4480d83151a";
 
     Location location;
+    LocationRequest locationRequest;
+    FusedLocationProviderClient locationProviderClient;
     LocationManager locationManager;
 
 
@@ -93,21 +98,26 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         super.onStart();
 
         // 위치정보 퍼미션 허용이 아닐 경우
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // 퍼미션 요청
             requestLocationPermission();
 
         } else {
-
         }
         // 위치정보 받아오기
-
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        createLocationRequest();
         Log.d("디버깅", "MyPageActivity - onStart(): ");
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
+
+        /*imageView_weatherIcon.setImageDrawable();
+        textView_temperature.setText();
+        textView_weatherInfo.setText();
+        textView_cityInfo.setText();*/
         Log.d("디버깅", "MyPageActivity - onResume(): ");
     }
 
@@ -189,56 +199,18 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         overridePendingTransition(0, 0);
     }
 
-    public Location getLocation() {
-        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-
-        isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        if (!isGPSEnabled && !isNetworkEnabled) {
-            // GPS와 네트워크 불가시 소스 구현
-        } else {
-            this.getLocation = true;
-
-            if (isNetworkEnabled) {
-
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_UPDATE_INTERVAL, MINIMUM_UPDATE_DISTANCE, this);
-                }
-                if (locationManager != null) {
-                    // 퍼미션 요청 수락시
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-
-                } else { // 퍼미션 요청 거절시
-                    // 퍼미션 재요청
-                    requestLocationPermission();
-                }
-
-            }
-        }
-
-        if (isGPSEnabled) {
-            if (location == null) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_UPDATE_INTERVAL, MINIMUM_UPDATE_DISTANCE, this);
-
-                if (locationManager != null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                    if (location != null) {
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                    }
-                }
-            }
-        }
-        return location;
+    private void createLocationRequest() {
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(MINIMUM_UPDATE_INTERVAL);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setMaxWaitTime(MINIMUM_UPDATE_INTERVAL * 5);
     }
+
+    
 
     public void requestLocationPermission() {
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             // 다이얼로그 설정
             new AlertDialog.Builder(this)
@@ -250,7 +222,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 퍼미션 창 보여주기
-                            ActivityCompat.requestPermissions(SettingActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_LOCATION);
+                            ActivityCompat.requestPermissions(SettingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
                         }
                     })
 
@@ -266,52 +238,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     .create().show();
 
         } else { // TODO 이 부분 알아보기
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
         }
-    }
-
-    private void getWeatherData(double latitude, double longitude) {
-        String weatherApiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric&appid=" + weatherApiKey;
-    }
-
-    /*@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        // 퍼미션 체크 후 결과값 받아오기
-        if (requestCode == PERMISSION_LOCATION) {
-            // 권한 허용시
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "권한이 허용되었습니다", Toast.LENGTH_SHORT).show();
-
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-
-            } else {
-                Toast.makeText(this, "권한이 거부되었습니다", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }*/
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-        getWeatherData(location.getLatitude(), location.getLongitude());
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 }
