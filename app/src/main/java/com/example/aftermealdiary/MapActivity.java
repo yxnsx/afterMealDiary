@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,14 +16,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,11 +38,18 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     Button button_calendar;
     Button button_map;
     Button button_setting;
-    Fragment fragment_mapView;
     CoordinatorLayout coordinatorLayout_snackBarHolder;
 
     private GoogleMap googleMap;
+    private Marker currentMarker = null;
     int PERMISSION_LOCATION = 30;
+    long MINIMUM_UPDATE_INTERVAL = 3000; // 3초
+    long MAXIMUM_UPDATE_INTERVAL = 1000; // 1초
+
+    Location location;
+    LocationRequest locationRequest;
+    FusedLocationProviderClient locationProviderClient;
+    LocationManager locationManager;
 
 
     @Override
@@ -59,6 +73,18 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_mapView);
         mapFragment.getMapAsync(this);
+
+        locationRequest = new LocationRequest()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(MAXIMUM_UPDATE_INTERVAL)
+                .setFastestInterval(MINIMUM_UPDATE_INTERVAL);
+
+        LocationSettingsRequest.Builder builder =
+                new LocationSettingsRequest.Builder();
+
+        builder.addLocationRequest(locationRequest);
+
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override
@@ -111,19 +137,56 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap = googleMap;
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+        setDefaultLocation();
 
-        LatLng SEOUL = new LatLng(37.56, 126.97);
+        checkPermissions();
+        requestPermissions();
+    }
+
+    public void setDefaultLocation() {
+
+        //디폴트 위치, Seoul
+        LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
+        String markerTitle = "위치정보 없음";
+        String markerSnippet = "위치 접근 권한을 허용해주세요.";
+
+        if (currentMarker != null) currentMarker.remove();
 
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(SEOUL);
-        markerOptions.title("서울");
-        markerOptions.snippet("한국의 수도");
-        googleMap.addMarker(markerOptions);
+        markerOptions.position(DEFAULT_LOCATION);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        currentMarker = googleMap.addMarker(markerOptions);
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15);
+        googleMap.moveCamera(cameraUpdate);
+
+    }
+
+    public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
+
+
+        if (currentMarker != null) currentMarker.remove();
+
+
+        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLatLng);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+        markerOptions.draggable(true);
+
+
+        currentMarker = googleMap.addMarker(markerOptions);
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+        googleMap.moveCamera(cameraUpdate);
+
     }
 
     private boolean checkPermissions() {
@@ -131,7 +194,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 this, Manifest.permission.ACCESS_FINE_LOCATION);
 
         int backgroundLocationPermissionState = ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+                this, Manifest.permission.ACCESS_COARSE_LOCATION);
 
         return (fineLocationPermissionState == PackageManager.PERMISSION_GRANTED) &&
                 (backgroundLocationPermissionState == PackageManager.PERMISSION_GRANTED);
@@ -146,7 +209,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
         boolean backgroundLocationPermissionApproved =
                 ActivityCompat.checkSelfPermission(
-                        this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED;
 
         boolean shouldProvideRationale =
@@ -161,19 +224,19 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onClick(View view) {
                             // Request permission
-                            ActivityCompat.requestPermissions(SettingActivity.this,
+                            ActivityCompat.requestPermissions(MapActivity.this,
                                     new String[] {
                                             Manifest.permission.ACCESS_FINE_LOCATION,
-                                            Manifest.permission.ACCESS_BACKGROUND_LOCATION },
+                                            Manifest.permission.ACCESS_COARSE_LOCATION },
                                     PERMISSION_LOCATION);
                         }
                     })
                     .show();
         } else {
-            ActivityCompat.requestPermissions(SettingActivity.this,
+            ActivityCompat.requestPermissions(MapActivity.this,
                     new String[] {
                             Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_BACKGROUND_LOCATION },
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
                     PERMISSION_LOCATION);
         }
     }
