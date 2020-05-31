@@ -1,17 +1,28 @@
 package com.example.aftermealdiary;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
-public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
 
     TextView textView_menuPicker;
     TextView textView_alarm;
@@ -19,9 +30,28 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     TextView textView_sendOpinion;
     TextView textView_setting;
 
+    ImageView imageView_weatherIcon;
+    TextView textView_temperature;
+    TextView textView_weatherInfo;
+    TextView textView_cityInfo;
+
     Button button_home;
     Button button_calendar;
     Button button_setting;
+
+    int PERMISSION_LOCATION = 30;
+    double latitude; // 위도
+    double longitude; // 경도
+    long MINIMUM_UPDATE_DISTANCE = 1000; // 1000미터
+    long MINIMUM_UPDATE_INTERVAL = 1000 * 60; // 1000밀리세컨즈 * 60 = 1분
+    boolean isGPSEnabled = false;
+    boolean isNetworkEnabled = false;
+    boolean getLocation = false;
+    String weatherApiKey = "6c0499aec54f347ed22ed4480d83151a";
+
+    Location location;
+    LocationManager locationManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,61 +59,66 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_setting);
 
         // 레이아웃 리소스
-        button_home = findViewById(R.id.button_home);
-        button_calendar = findViewById(R.id.button_calendar);
-        button_setting = findViewById(R.id.button_setting);
-
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
         textView_nutrientInfo = findViewById(R.id.textView_nutrientInfo);
         textView_sendOpinion = findViewById(R.id.textView_sendOpinion);
         textView_setting = findViewById(R.id.textView_setting);
 
-        // 클릭리스너 설정
-        button_home.setOnClickListener(this);
-        button_calendar.setOnClickListener(this);
-        button_setting.setOnClickListener(this);
+        imageView_weatherIcon = findViewById(R.id.imageView_weatherIcon);
+        textView_temperature = findViewById(R.id.textView_temperature);
+        textView_weatherInfo = findViewById(R.id.textView_weatherInfo);
+        textView_cityInfo = findViewById(R.id.textView_cityInfo);
 
+        button_home = findViewById(R.id.button_home);
+        button_calendar = findViewById(R.id.button_calendar);
+        button_setting = findViewById(R.id.button_setting);
+
+        // 클릭리스너 설정
         textView_menuPicker.setOnClickListener(this);
         textView_alarm.setOnClickListener(this);
         textView_nutrientInfo.setOnClickListener(this);
         textView_sendOpinion.setOnClickListener(this);
         textView_setting.setOnClickListener(this);
 
+        button_home.setOnClickListener(this);
+        button_calendar.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
+
         Log.d("디버깅", "MyPageActivity - onCreate(): ");
     }
 
     @Override
     protected void onStart() {
-        
+
         super.onStart();
         Log.d("디버깅", "MyPageActivity - onStart(): ");
     }
 
     @Override
     protected void onResume() {
-        
+
         super.onResume();
         Log.d("디버깅", "MyPageActivity - onResume(): ");
     }
 
     @Override
     protected void onPause() {
-        
+
         super.onPause();
         Log.d("디버깅", "MyPageActivity - onPause(): ");
     }
 
     @Override
     protected void onStop() {
-        
+
         super.onStop();
         Log.d("디버깅", "MyPageActivity - onStop(): ");
     }
 
     @Override
     protected void onDestroy() {
-        
+
         super.onDestroy();
         Log.d("디버깅", "MyPageActivity - onDestroy(): ");
     }
@@ -144,4 +179,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         super.onBackPressed();
         overridePendingTransition(0, 0);
     }
+
+    
 }
