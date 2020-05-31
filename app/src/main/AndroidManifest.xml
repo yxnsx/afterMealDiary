@@ -20,11 +20,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
-        <service
-            android:name=".NotificationService"
-            android:enabled="true"
-            android:exported="true" />
-
         <receiver android:name=".AlarmNotification" /> <!-- 스플래시 액티비티 -->
         <activity android:name=".SplashActivity">
             <intent-filter>
