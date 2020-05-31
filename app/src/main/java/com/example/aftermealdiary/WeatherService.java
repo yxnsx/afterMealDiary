@@ -1,30 +1,39 @@
 package com.example.aftermealdiary;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
-import android.os.IBinder;
+import android.location.Location;
 
 import androidx.annotation.Nullable;
 
-public class WeatherService extends Service {
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+import com.google.android.gms.location.LocationResult;
+
+import java.util.List;
+
+
+public class WeatherService extends IntentService {
+
+    private static final String ACTION_PROCESS_UPDATES =
+            "com.google.android.gms.location.sample.locationupdatespendingintent.action" +
+                    ".PROCESS_UPDATES";
+
+
+    public WeatherService(String name) { // 파라미터로 전달되는 name은 워커 스레드의 이름일 뿐이며 디버깅 시에만 유용하게 사용됨
+        super(name);
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-    }
+    protected void onHandleIntent(@Nullable Intent intent) {
+        if (intent != null) {
+            final String action = intent.getAction();
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-    }
+            if (ACTION_PROCESS_UPDATES.equals(action)) {
+                LocationResult result = LocationResult.extractResult(intent);
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+                if (result != null) {
+                    List<Location> locations = result.getLocations();
+                }
+            }
+        }
     }
 }

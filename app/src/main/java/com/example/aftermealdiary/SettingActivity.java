@@ -90,8 +90,17 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onStart() {
-
         super.onStart();
+
+        // 위치정보 퍼미션 허용이 아닐 경우
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+
+        } else {
+
+        }
+        // 위치정보 받아오기
+
         Log.d("디버깅", "MyPageActivity - onStart(): ");
     }
 
