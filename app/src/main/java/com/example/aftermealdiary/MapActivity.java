@@ -122,6 +122,18 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
     }
 
+    private boolean checkPermissions() {
+        int fineLocationPermissionState = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        int backgroundLocationPermissionState = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+
+        return (fineLocationPermissionState == PackageManager.PERMISSION_GRANTED) &&
+                (backgroundLocationPermissionState == PackageManager.PERMISSION_GRANTED);
+    }
+    
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
