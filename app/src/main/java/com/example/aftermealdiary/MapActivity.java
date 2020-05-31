@@ -132,7 +132,47 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         return (fineLocationPermissionState == PackageManager.PERMISSION_GRANTED) &&
                 (backgroundLocationPermissionState == PackageManager.PERMISSION_GRANTED);
     }
-    
+
+    private void requestPermissions() {
+
+        boolean permissionAccessFineLocationApproved =
+                ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+
+        boolean backgroundLocationPermissionApproved =
+                ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+
+        boolean shouldProvideRationale =
+                permissionAccessFineLocationApproved && backgroundLocationPermissionApproved;
+
+        if (shouldProvideRationale) {
+            Snackbar.make(
+                    coordinatorLayout_mainLayout,
+                    "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction("허용", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(SettingActivity.this,
+                                    new String[] {
+                                            Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_BACKGROUND_LOCATION },
+                                    PERMISSION_LOCATION);
+                        }
+                    })
+                    .show();
+        } else {
+            ActivityCompat.requestPermissions(SettingActivity.this,
+                    new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION },
+                    PERMISSION_LOCATION);
+        }
+    }
 
     @Override
     public void onBackPressed() {
