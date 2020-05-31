@@ -2,32 +2,35 @@ package com.example.aftermealdiary;
 
 import android.Manifest;
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
+    CoordinatorLayout coordinatorLayout_mainLayout;
     TextView textView_menuPicker;
     TextView textView_alarm;
     TextView textView_nutrientInfo;
@@ -65,6 +68,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_setting);
 
         // 레이아웃 리소스
+        coordinatorLayout_mainLayout = findViewById(R.id.coordinatorLayout_mainLayout);
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
         textView_nutrientInfo = findViewById(R.id.textView_nutrientInfo);
@@ -95,19 +99,30 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onStart() {
         super.onStart();
 
-        // 위치정보 퍼미션 허용이 아닐 경우
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // 퍼미션 요청
-            requestLocationPermission();
+        /*// 퍼미션 요청 수락시
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            createLocationRequest();
 
-        } else {
+            Log.d("디버깅", "WriteActivity - onClick(): 이미지 추가 버튼");
+
+        } else { // 퍼미션 요청 거절시
+            // 퍼미션 재요청
+            requestLocationPermission();
+        }*/
+
+        // Check if the user revoked runtime permissions.
+        if (!checkPermissions()) {
+            requestPermissions();
         }
-        // 위치정보 받아오기
+
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
+
         Log.d("디버깅", "MyPageActivity - onStart(): ");
     }
 
@@ -119,6 +134,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         textView_temperature.setText();
         textView_weatherInfo.setText();
         textView_cityInfo.setText();*/
+
         Log.d("디버깅", "MyPageActivity - onResume(): ");
     }
 
@@ -172,7 +188,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(0, 0);
                 break;
 
-
             case R.id.textView_menuPicker:
                 Intent intentMenuPicker = new Intent(getApplicationContext(), MenuPickerActivity.class);
                 intentMenuPicker.putExtra("intentFrom", "setting");
@@ -200,6 +215,17 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         overridePendingTransition(0, 0);
     }
 
+    private boolean checkPermissions() {
+        int fineLocationPermissionState = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        int backgroundLocationPermissionState = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+
+        return (fineLocationPermissionState == PackageManager.PERMISSION_GRANTED) &&
+                (backgroundLocationPermissionState == PackageManager.PERMISSION_GRANTED);
+    }
+
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(MINIMUM_UPDATE_INTERVAL);
@@ -207,45 +233,81 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         locationRequest.setMaxWaitTime(MINIMUM_UPDATE_INTERVAL * 5);
     }
 
-    private PendingIntent getPendingIntent() {
-        Intent intent = new Intent(this, LocationBroadcastReceiver.class);
-        intent.setAction(LocationBroadcastReceiver.ACTION_PROCESS_UPDATES);
-        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private void requestPermissions() {
+
+        boolean permissionAccessFineLocationApproved =
+                ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+
+        boolean backgroundLocationPermissionApproved =
+                ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+
+        boolean shouldProvideRationale =
+                permissionAccessFineLocationApproved && backgroundLocationPermissionApproved;
+
+        if (shouldProvideRationale) {
+            Snackbar.make(
+                    coordinatorLayout_mainLayout,
+                    "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction("허용", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(SettingActivity.this,
+                                    new String[] {
+                                            Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_BACKGROUND_LOCATION },
+                                    PERMISSION_LOCATION);
+                        }
+                    })
+                    .show();
+        } else {
+            ActivityCompat.requestPermissions(SettingActivity.this,
+                    new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION },
+                    PERMISSION_LOCATION);
+        }
     }
 
-    
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
 
-    public void requestLocationPermission() {
+        if (requestCode == PERMISSION_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted.
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Intent intent = new Intent(this, LocationBroadcastReceiver.class);
+                intent.setAction(LocationBroadcastReceiver.ACTION_PROCESS_UPDATES);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            // 다이얼로그 설정
-            new AlertDialog.Builder(this)
-                    .setTitle("접근 권한 설정")
-                    .setMessage("날씨 정보를 사용하기 위해서는 위치 접근 권한이 필요합니다.")
+                locationProviderClient.requestLocationUpdates(locationRequest, pendingIntent); // 에러나면 requestLocationUpdates 메서드로 빼서 구현
 
-                    // 권한 허용 버튼 클릭시
-                    .setPositiveButton("허용", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // 퍼미션 창 보여주기
-                            ActivityCompat.requestPermissions(SettingActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
-                        }
-                    })
-
-                    // 권한 거부 버튼 클릭시
-                    .setNegativeButton("거부", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // 토스트 메시지 출력 후 다이얼로그 종료
-                            Toast.makeText(SettingActivity.this, "권한이 거부되었습니다", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
-
-        } else { // TODO 이 부분 알아보기
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+            } else {
+                Snackbar.make(
+                        coordinatorLayout_mainLayout,
+                        "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction("설정", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        BuildConfig.APPLICATION_ID, null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
         }
     }
 }
