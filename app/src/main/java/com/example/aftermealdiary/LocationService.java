@@ -11,14 +11,14 @@ import com.google.android.gms.location.LocationResult;
 import java.util.List;
 
 
-public class WeatherService extends IntentService {
+public class LocationService extends IntentService {
 
     private static final String ACTION_PROCESS_UPDATES =
             "com.google.android.gms.location.sample.locationupdatespendingintent.action" +
                     ".PROCESS_UPDATES";
 
 
-    public WeatherService(String name) { // 파라미터로 전달되는 name은 워커 스레드의 이름일 뿐이며 디버깅 시에만 유용하게 사용됨
+    public LocationService(String name) { // 파라미터로 전달되는 name은 워커 스레드의 이름일 뿐이며 디버깅 시에만 유용하게 사용됨
         super(name);
     }
 
