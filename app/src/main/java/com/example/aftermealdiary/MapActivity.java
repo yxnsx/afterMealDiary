@@ -155,7 +155,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         if (shouldProvideRationale) {
             Snackbar.make(
                     coordinatorLayout_snackBarHolder,
-                    "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
+                    "지도를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
                     Snackbar.LENGTH_INDEFINITE)
                     .setAction("허용", new View.OnClickListener() {
                         @Override
@@ -183,6 +183,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                                            @NonNull int[] grantResults) {
 
         if (requestCode == PERMISSION_LOCATION) {
+            // 퍼미션을 허용했을 경우
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted.
 
@@ -195,7 +196,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
             } else {
                 Snackbar.make(
                         coordinatorLayout_snackBarHolder,
-                        "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
+                        "지도를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
                         Snackbar.LENGTH_INDEFINITE)
                         .setAction("설정", new View.OnClickListener() {
                             @Override
