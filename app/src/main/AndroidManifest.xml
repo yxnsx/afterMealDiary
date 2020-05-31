@@ -22,6 +22,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".MapActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="85:1D:41:88:95:79:65:B4:59:36:E2:69:83:52:F6:3F:0D:27:C9:09" />
+
         <receiver
             android:name=".LocationBroadcastReceiver"
             android:enabled="true"
@@ -30,6 +36,7 @@
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- 홈 액티비티 -->

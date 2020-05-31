@@ -53,6 +53,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     Button button_home;
     Button button_calendar;
+    Button button_map;
     Button button_setting;
     FloatingActionButton floatingActionButton_write;
 
@@ -73,6 +74,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
+        button_map = findViewById(R.id.button_map);
         button_setting = findViewById(R.id.button_setting);
         floatingActionButton_write = findViewById(R.id.floatingActionButton_write);
 
@@ -80,6 +82,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         banner.setOnClickListener(this);
         button_home.setOnClickListener(this);
         button_calendar.setOnClickListener(this);
+        button_map.setOnClickListener(this);
         button_setting.setOnClickListener(this);
         floatingActionButton_write.setOnClickListener(this);
 
@@ -220,6 +223,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_calendar:
                 Intent intentCalendar = new Intent(this, CalendarActivity.class);
                 startActivity(intentCalendar);
+                // 화면 트랜지션 없도록 설정
+                overridePendingTransition(0, 0);
+
+                bannerHandler.sendEmptyMessage(SEND_STOP);
+                break;
+
+            case R.id.button_map:
+                Intent intentMap = new Intent(this, MapActivity.class);
+                startActivity(intentMap);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
 

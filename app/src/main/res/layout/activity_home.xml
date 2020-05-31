@@ -168,6 +168,19 @@
             android:textColor="@color/colorTransparentBlack" />
 
         <Button
+            android:id="@+id/button_map"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            android:drawableTop="@drawable/ic_map_24dp"
+            android:drawablePadding="-12dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
+            android:paddingTop="12dp"
+            android:text="지도"
+            android:textColor="@color/colorTransparentBlack" />
+
+        <Button
             android:id="@+id/button_myPage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
