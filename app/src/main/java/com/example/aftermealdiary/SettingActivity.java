@@ -1,7 +1,6 @@
 package com.example.aftermealdiary;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -14,11 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
@@ -180,5 +176,71 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         overridePendingTransition(0, 0);
     }
 
-    
+    public Location getLocation() {
+        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+
+        isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (!isGPSEnabled && !isNetworkEnabled) {
+            // GPS와 네트워크 불가시 소스 구현
+        } else {
+            this.getLocation = true;
+
+            if (isNetworkEnabled) {
+
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_UPDATE_INTERVAL, MINIMUM_UPDATE_DISTANCE, this);
+                }
+                if (locationManager != null) {
+                    // 퍼미션 요청 수락시
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+
+                } else { // 퍼미션 요청 거절시
+                    // 퍼미션 재요청
+
+                }
+
+            }
+        }
+
+        if (isGPSEnabled) {
+            if (location == null) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_UPDATE_INTERVAL, MINIMUM_UPDATE_DISTANCE, this);
+
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                    if (location != null) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+                }
+            }
+        }
+        return location;
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }
