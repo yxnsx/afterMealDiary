@@ -288,7 +288,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onLocationChanged(Location location) {
-
+        getWeatherData(location.getLatitude(), location.getLongitude());
     }
 
     @Override
