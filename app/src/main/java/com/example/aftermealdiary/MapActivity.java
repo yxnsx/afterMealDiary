@@ -1,18 +1,38 @@
 package com.example.aftermealdiary;
 
+import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
-public class MapActivity extends AppCompatActivity implements View.OnClickListener {
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
+
+public class MapActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
     Button button_home;
     Button button_calendar;
     Button button_map;
     Button button_setting;
+    Fragment fragment_mapView;
+
+    private GoogleMap googleMap;
 
 
     @Override
@@ -31,6 +51,22 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         button_calendar.setOnClickListener(this);
         button_map.setOnClickListener(this);
         button_setting.setOnClickListener(this);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_mapView);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (!checkPermissions()) {
+            requestPermissions();
+        }
+
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        createLocationRequest();
     }
 
     @Override
@@ -68,5 +104,27 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 overridePendingTransition(0, 0);
                 break;
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap = googleMap;
+
+        LatLng SEOUL = new LatLng(37.56, 126.97);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(SEOUL);
+        markerOptions.title("서울");
+        markerOptions.snippet("한국의 수도");
+        googleMap.addMarker(markerOptions);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
     }
 }
