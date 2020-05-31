@@ -261,6 +261,30 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private void getWeatherData(double latitude, double longitude) {
+        String weatherApiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric&appid=" + weatherApiKey;
+    }
+
+    /*@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        // 퍼미션 체크 후 결과값 받아오기
+        if (requestCode == PERMISSION_LOCATION) {
+            // 권한 허용시
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "권한이 허용되었습니다", Toast.LENGTH_SHORT).show();
+
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+
+            } else {
+                Toast.makeText(this, "권한이 거부되었습니다", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }*/
+
 
     @Override
     public void onLocationChanged(Location location) {
