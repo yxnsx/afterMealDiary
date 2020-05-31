@@ -82,6 +82,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         button_calendar.setOnClickListener(this);
         button_setting.setOnClickListener(this);
         floatingActionButton_write.setOnClickListener(this);
+
+        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        startService(intent);
     }
 
 
