@@ -33,6 +33,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     Fragment fragment_mapView;
 
     private GoogleMap googleMap;
+    int PERMISSION_LOCATION = 30;
 
 
     @Override
@@ -171,6 +172,43 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION },
                     PERMISSION_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == PERMISSION_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted.
+
+                Intent intent = new Intent(this, LocationBroadcastReceiver.class);
+                intent.setAction(LocationBroadcastReceiver.ACTION_PROCESS_UPDATES);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                locationProviderClient.requestLocationUpdates(locationRequest, pendingIntent); // 에러나면 requestLocationUpdates 메서드로 빼서 구현
+
+            } else {
+                Snackbar.make(
+                        coordinatorLayout_mainLayout,
+                        "날씨 정보를 사용하기 위해서는 \n위치 접근 권한이 필요합니다.",
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction("설정", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        BuildConfig.APPLICATION_ID, null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
         }
     }
 
