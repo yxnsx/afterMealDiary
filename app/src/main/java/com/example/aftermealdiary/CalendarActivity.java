@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class CalendarActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView toolbar_title;
     Button button_home;
     Button button_calendar;
     Button button_map;
@@ -23,7 +21,6 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_calendar);
 
         // 레이아웃 리소스
-        toolbar_title = findViewById(R.id.textView_postTitle);
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
         button_map = findViewById(R.id.button_map);
