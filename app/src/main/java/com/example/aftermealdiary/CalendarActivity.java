@@ -7,6 +7,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class CalendarActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -14,6 +19,9 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     Button button_calendar;
     Button button_map;
     Button button_setting;
+
+    CompactCalendarView compactCalendarView;
+    private SimpleDateFormat monthFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +33,16 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         button_calendar = findViewById(R.id.button_calendar);
         button_map = findViewById(R.id.button_map);
         button_setting = findViewById(R.id.button_setting);
+        compactCalendarView = findViewById(R.id.compactCalendarView);
 
         // 클릭리스너 설정
         button_home.setOnClickListener(this);
         button_calendar.setOnClickListener(this);
         button_map.setOnClickListener(this);
         button_setting.setOnClickListener(this);
+
+        // 캘린더뷰 설정
+        compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
     }
 
     @Override
