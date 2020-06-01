@@ -84,13 +84,14 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
             e.printStackTrace();
         }
 
-        @SuppressLint("SimpleDateFormat")
         Date currentDate = new Date();
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat calendarInfoFormatter = new SimpleDateFormat("yyyy/MM");
         String calendarInfo = calendarInfoFormatter.format(currentDate);
 
         textView_calendarInfo.setText(calendarInfo);
 
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
         String selectedDate = formatter.format(currentDate);
 
@@ -171,6 +172,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void setEvents() throws JSONException, ParseException {
+
         postDataForEvent = PostData.getArrayListFromSharedPreferences(getApplicationContext());
 
         for(int i = 0; i < postDataForEvent.size(); i++) {
