@@ -2,25 +2,38 @@ package com.example.aftermealdiary;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
+    CoordinatorLayout coordinatorLayout_mainLayout;
     TextView textView_menuPicker;
     TextView textView_alarm;
+    TextView textView_nutrientInfo;
     TextView textView_sendOpinion;
     TextView textView_setting;
 
+    ImageView imageView_weatherIcon;
+    TextView textView_temperature;
+    TextView textView_weatherInfo;
+    TextView textView_cityInfo;
+
     Button button_home;
     Button button_calendar;
+    Button button_map;
     Button button_setting;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,59 +41,70 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_setting);
 
         // 레이아웃 리소스
-        button_home = findViewById(R.id.button_home);
-        button_calendar = findViewById(R.id.button_calendar);
-        button_setting = findViewById(R.id.button_setting);
-
+        coordinatorLayout_mainLayout = findViewById(R.id.coordinatorLayout_mainLayout);
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
+        textView_nutrientInfo = findViewById(R.id.textView_nutrientInfo);
         textView_sendOpinion = findViewById(R.id.textView_sendOpinion);
         textView_setting = findViewById(R.id.textView_setting);
 
-        // 클릭리스너 설정
-        button_home.setOnClickListener(this);
-        button_calendar.setOnClickListener(this);
-        button_setting.setOnClickListener(this);
+        imageView_weatherIcon = findViewById(R.id.imageView_weatherIcon);
+        textView_temperature = findViewById(R.id.textView_temperature);
+        textView_weatherInfo = findViewById(R.id.textView_weatherInfo);
+        textView_cityInfo = findViewById(R.id.textView_cityInfo);
 
+        button_home = findViewById(R.id.button_home);
+        button_calendar = findViewById(R.id.button_calendar);
+        button_map = findViewById(R.id.button_map);
+        button_setting = findViewById(R.id.button_setting);
+
+        // 클릭리스너 설정
         textView_menuPicker.setOnClickListener(this);
         textView_alarm.setOnClickListener(this);
+        textView_nutrientInfo.setOnClickListener(this);
         textView_sendOpinion.setOnClickListener(this);
         textView_setting.setOnClickListener(this);
+
+        button_home.setOnClickListener(this);
+        button_calendar.setOnClickListener(this);
+        button_map.setOnClickListener(this);
+        button_setting.setOnClickListener(this);
 
         Log.d("디버깅", "MyPageActivity - onCreate(): ");
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onStart() {
-        
         super.onStart();
+
         Log.d("디버깅", "MyPageActivity - onStart(): ");
     }
 
     @Override
     protected void onResume() {
-        
         super.onResume();
+
         Log.d("디버깅", "MyPageActivity - onResume(): ");
     }
 
     @Override
     protected void onPause() {
-        
+
         super.onPause();
         Log.d("디버깅", "MyPageActivity - onPause(): ");
     }
 
     @Override
     protected void onStop() {
-        
+
         super.onStop();
         Log.d("디버깅", "MyPageActivity - onStop(): ");
     }
 
     @Override
     protected void onDestroy() {
-        
+
         super.onDestroy();
         Log.d("디버깅", "MyPageActivity - onDestroy(): ");
     }
@@ -106,6 +130,13 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(0, 0);
                 break;
 
+            case R.id.button_map:
+                Intent intentMap = new Intent(this, MapActivity.class);
+                startActivity(intentMap);
+                // 화면 트랜지션 없도록 설정
+                overridePendingTransition(0, 0);
+                break;
+
             // 세팅 버튼을 클릭했을 경우
             case R.id.button_myPage:
                 Intent toMyPage = new Intent(v.getContext(), SettingActivity.class);
@@ -113,7 +144,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
                 break;
-
 
             case R.id.textView_menuPicker:
                 Intent intentMenuPicker = new Intent(getApplicationContext(), MenuPickerActivity.class);

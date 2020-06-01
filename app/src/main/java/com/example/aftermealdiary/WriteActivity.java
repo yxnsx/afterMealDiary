@@ -1,17 +1,8 @@
 package com.example.aftermealdiary;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -25,10 +16,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.aftermealdiary.adapter.HomeListAdapter;
 import com.example.aftermealdiary.item.PostData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
@@ -191,7 +188,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             // 다이얼로그 설정
             new AlertDialog.Builder(this)
                     .setTitle("접근 권한 설정")
-                    .setMessage("사진을 첨부하기 위해서는 접근 권한이 필요합니다.")
+                    .setMessage("사진을 첨부하기 위해서는 미디어 접근 권한이 필요합니다.")
 
                     // 권한 허용 버튼 클릭시
                     .setPositiveButton("허용", new DialogInterface.OnClickListener() {

@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -16,38 +15,31 @@ import androidx.core.app.NotificationCompat;
 import java.util.Calendar;
 
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class AlarmNotification extends BroadcastReceiver {
+
+    NotificationManager notificationManager;
+    NotificationChannel channel;
+    NotificationCompat.Builder notificationBuilder;
+
+    String channelName = "alarmNotification"; // 푸시 그룹들로 묶인 채널을 사용자가 받을지 안받을지 제어할 수 있도록 하는 역할
+    String description = "setNotification";
+    int importance = NotificationManager.IMPORTANCE_HIGH; //소리와 알림메시지를 같이 보여줌
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         Intent notificationIntent = new Intent(context, HomeActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
-
-
-        builder.setSmallIcon(R.drawable.circle_orange);
-
-        String channelName = "afterMealDiary";
-        String description = "setNotification";
-        int importance = NotificationManager.IMPORTANCE_HIGH; //소리와 알림메시지를 같이 보여줌
-
-        NotificationChannel channel = new NotificationChannel("default", channelName, importance);
-        channel.setDescription(description);
-
-        if (notificationManager != null) { // 노티피케이션 채널을 시스템에 등록
-            notificationManager.createNotificationChannel(channel);
-
-        } else {
-            Log.d("디버깅", "AlarmReceiver - onReceive(): notificationManager == null");
-        }
-
-        builder.setAutoCancel(true)
+        // 노티피케이션 설정
+        notificationBuilder = new NotificationCompat.Builder(context, "default");
+        notificationBuilder.setAutoCancel(true)
+                .setSmallIcon(R.drawable.circle_orange)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setTicker("")
@@ -57,10 +49,17 @@ public class AlarmNotification extends BroadcastReceiver {
                 .setPriority(Notification.PRIORITY_MAX)
                 .setContentIntent(pendingIntent);
 
+        // 노티피케이션 채널 설정
+        channel = new NotificationChannel("default", channelName, importance);
+        channel.setDescription(description);
+
+        // 노티피케이션 매니저 설정
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
 
             // 노티피케이션 동작시킴
-            notificationManager.notify(0, builder.build());
+            notificationManager.createNotificationChannel(channel);
+            notificationManager.notify(0, notificationBuilder.build());
 
             Calendar nextNotifyTime = Calendar.getInstance();
 

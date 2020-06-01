@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.aftermealdiary">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -11,25 +14,31 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
 
-        <receiver android:name=".AlarmNotification" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCzyE2ga4Zn1Z8jK9tSJxH0YCkUHhNVimE" />
 
-        <!-- 스플래시 액티비티 -->
+        <receiver
+            android:name=".LocationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+        <receiver android:name=".AlarmNotification" /> <!-- 스플래시 액티비티 -->
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 홈 액티비티 -->
+        </activity> <!-- 홈 액티비티 -->
         <activity
             android:name=".HomeActivity"
             android:exported="true"
@@ -37,15 +46,17 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 캘린더 액티비티 -->
+        </activity> <!-- 캘린더 액티비티 -->
         <activity
             android:name=".CalendarActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
+        </activity> <!-- 지도 액티비티 -->
+        <activity
+            android:name=".MapActivity"
+            android:launchMode="singleTop" />
         <!-- 마이페이지 액티비티 -->
         <activity
             android:name=".SettingActivity"
@@ -53,60 +64,52 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 글 보기 액티비티 -->
+        </activity> <!-- 글 보기 액티비티 -->
         <activity
             android:name=".PostActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 글 작성 액티비티 -->
+        </activity> <!-- 글 작성 액티비티 -->
         <activity
             android:name=".WriteActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 글 수정 액티비티 -->
+        </activity> <!-- 글 수정 액티비티 -->
         <activity
             android:name=".EditActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 로그인 액티비티 -->
+        </activity> <!-- 로그인 액티비티 -->
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 계정생성 액티비티 -->
+        </activity> <!-- 계정생성 액티비티 -->
         <activity
             android:name=".SignUpActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 캘린더 리스트 액티비티 -->
+        </activity> <!-- 캘린더 리스트 액티비티 -->
         <activity
             android:name=".CalendarListActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
-        <!-- 메뉴 룰렛 액티비티 -->
+        </activity> <!-- 메뉴 룰렛 액티비티 -->
         <activity
             android:name=".MenuPickerActivity"
-            android:launchMode="singleTop" />
-        <!-- 알람 액티비티 -->
+            android:launchMode="singleTop" /> <!-- 알람 액티비티 -->
         <activity
             android:name=".AlarmActivity"
             android:launchMode="singleTop" />

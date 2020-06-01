@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
@@ -15,8 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-    <TextView
+        <TextView
             android:id="@+id/textView_toolBarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,22 +39,91 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container">
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout_mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView_weatherIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/spoqa_han_sans_bold"
+            android:text="- 현재 온도 -"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView_weatherIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageView_weatherIcon"
+            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
+
+        <TextView
+            android:id="@+id/textView_weatherInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
+            android:text="- 현재 날씨 정보 -"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView_weatherIcon"
+            app:layout_constraintStart_toEndOf="@+id/textView_temperature"
+            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
+
+        <TextView
+            android:id="@+id/textView_cityInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
+            android:text="- 도시 이름 -"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView_weatherIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
+
+        <ImageView
+            android:id="@+id/imageView_border_00"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/colorTransparentBlack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_weatherIcon" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:fontFamily="@font/spoqa_han_sans_bold"
             android:text="메뉴 룰렛으로 \n오늘의 식사를 정해보세요!"
-            android:textSize="21sp"
             android:textColor="@color/colorPrimary"
+            android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/imageView_border_00" />
 
         <TextView
             android:id="@+id/textView_menuPicker"
@@ -66,7 +133,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/spoqa_han_sans_regular"
-            android:text="> 메뉴 룰렛"
+            android:text=">  메뉴 룰렛"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -108,6 +175,31 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_alarm" />
 
         <TextView
+            android:id="@+id/textView_nutrientInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:text="식품 영양 정보"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_border_02" />
+
+        <ImageView
+            android:id="@+id/imageView_border_03"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorTransparentBlack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_nutrientInfo" />
+
+        <TextView
             android:id="@+id/textView_sendOpinion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,10 +212,10 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView_border_02" />
+            app:layout_constraintTop_toTopOf="@+id/imageView_border_03" />
 
         <ImageView
-            android:id="@+id/imageView_border_03"
+            android:id="@+id/imageView_border_04"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="16dp"
@@ -145,7 +237,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView_border_03" />
+            app:layout_constraintTop_toTopOf="@+id/imageView_border_04" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -164,14 +256,14 @@
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:background="@color/colorWhite"
+        android:elevation="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:elevation="10dp">
+        app:layout_constraintStart_toStartOf="parent">
 
 
-    <Button
+        <Button
             android:id="@+id/button_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -179,11 +271,10 @@
             android:background="@color/colorWhite"
             android:drawableTop="@drawable/ic_home_24dp"
             android:drawablePadding="-12dp"
-            android:text="홈"
-            android:textColor="@color/colorTransparentBlack"
             android:fontFamily="@font/spoqa_han_sans_regular"
             android:paddingTop="12dp"
-            />
+            android:text="홈"
+            android:textColor="@color/colorTransparentBlack" />
 
         <Button
             android:id="@+id/button_calendar"
@@ -193,11 +284,23 @@
             android:background="@color/colorWhite"
             android:drawableTop="@drawable/ic_event_24dp"
             android:drawablePadding="-12dp"
-            android:text="캘린더"
-            android:textColor="@color/colorTransparentBlack"
             android:fontFamily="@font/spoqa_han_sans_regular"
             android:paddingTop="12dp"
-            />
+            android:text="캘린더"
+            android:textColor="@color/colorTransparentBlack" />
+
+        <Button
+            android:id="@+id/button_map"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorWhite"
+            android:drawableTop="@drawable/ic_map_24dp"
+            android:drawablePadding="-12dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
+            android:paddingTop="12dp"
+            android:text="지도"
+            android:textColor="@color/colorTransparentBlack" />
 
         <Button
             android:id="@+id/button_setting"
@@ -207,11 +310,10 @@
             android:background="@color/colorWhite"
             android:drawableTop="@drawable/ic_settings_24dp_selected"
             android:drawablePadding="-12dp"
-            android:text="설정"
-            android:textColor="@color/colorPrimary"
             android:fontFamily="@font/spoqa_han_sans_regular"
             android:paddingTop="12dp"
-            />
+            android:text="설정"
+            android:textColor="@color/colorPrimary" />
 
     </LinearLayout>
 

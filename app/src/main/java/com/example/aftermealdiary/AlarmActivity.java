@@ -1,9 +1,5 @@
 package com.example.aftermealdiary;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -22,6 +18,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aftermealdiary.adapter.AlarmListAdapter;
 
@@ -114,10 +114,13 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
                 if (Build.VERSION.SDK_INT >= 23) {
                     alarmHour = timePicker.getHour();
                     alarmMinute = timePicker.getMinute();
+
                 } else {
                     alarmHour = timePicker.getCurrentHour();
                     alarmMinute = timePicker.getCurrentMinute();
                 }
+                // 토스트 메시지 출력
+                Toast.makeText(getApplicationContext(), alarmHour + "시 " + alarmMinute + "분에 식사 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
                 // 알람 데이터 얻기 (알람정보) + editText_alarmInfo 초기화
                 alarmInfo = editText_alarmInfo.getText().toString();
@@ -139,8 +142,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
                 // 알람 저장 후 키보드 숨기기
                 hideKeyboard(this);
 
-                // 토스트 메시지 출력
-                Toast.makeText(getApplicationContext(), alarmHour + "시 " + alarmMinute + "분에 식사 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

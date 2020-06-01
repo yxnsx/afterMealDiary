@@ -4,16 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class CalendarActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView toolbar_title;
     Button button_home;
     Button button_calendar;
+    Button button_map;
     Button button_setting;
 
     @Override
@@ -22,14 +21,15 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_calendar);
 
         // 레이아웃 리소스
-        toolbar_title = findViewById(R.id.textView_postTitle);
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
+        button_map = findViewById(R.id.button_map);
         button_setting = findViewById(R.id.button_setting);
 
         // 클릭리스너 설정
         button_home.setOnClickListener(this);
         button_calendar.setOnClickListener(this);
+        button_map.setOnClickListener(this);
         button_setting.setOnClickListener(this);
     }
 
@@ -75,6 +75,13 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_calendar:
                 Intent toCalendar = new Intent(v.getContext(), CalendarActivity.class);
                 startActivity(toCalendar);
+                // 화면 트랜지션 없도록 설정
+                overridePendingTransition(0, 0);
+                break;
+
+            case R.id.button_map:
+                Intent intentMap = new Intent(this, MapActivity.class);
+                startActivity(intentMap);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
                 break;
