@@ -87,13 +87,7 @@
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
         </activity> <!-- 로그인 액티비티 -->
-        <activity
-            android:name=".LoginActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-            </intent-filter>
-        </activity> <!-- 계정생성 액티비티 -->
+        <!-- 계정생성 액티비티 -->
         <activity
             android:name=".SignUpActivity"
             android:launchMode="singleTop">
