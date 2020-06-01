@@ -107,7 +107,7 @@ public class PostData implements Parcelable {
     public static ArrayList<PostData> getArrayListFromSharedPreferences(Context context) throws JSONException {
 
         // SharedPreferences 객체 생성
-        postSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        postSharedPreferences = context.getSharedPreferences("POST_DATA", Context.MODE_PRIVATE);
         ArrayList<PostData> postDataArrayList = new ArrayList<>();
 
         // SharedPreferences에서 JSONArray 받아오기
@@ -133,8 +133,7 @@ public class PostData implements Parcelable {
 
     public static ArrayList<PostData> getDateArrayFromSharedPreferences(Context context, String selectedDate) throws JSONException {
         // SharedPreferences 객체 생성
-        postSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
+        postSharedPreferences = context.getSharedPreferences("POST_DATA", Context.MODE_PRIVATE);
         ArrayList<PostData> postDataForCalendar = new ArrayList<>();
 
         // SharedPreferences에서 JSONArray 받아오기

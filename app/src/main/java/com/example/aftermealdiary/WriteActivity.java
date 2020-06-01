@@ -133,6 +133,10 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 // 새 Post 객체 생성
                 postData = new PostData(postImage, postDate, postTitle, postText);
 
+                Log.d("디버깅", "WriteActivity - onClick(): postDate = " + postDate);
+                Log.d("디버깅", "WriteActivity - onClick(): postTitle = " + postTitle);
+                Log.d("디버깅", "WriteActivity - onClick(): postText = " + postText);
+
                 // 생성한 Post 값 반영 (arrayList, sharedPreferences)
                 try {
                     homeListAdapter.addPost(getApplicationContext(), postData);
