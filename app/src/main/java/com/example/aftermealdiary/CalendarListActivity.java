@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.aftermealdiary.adapter.CalendarListAdapter;
 import com.example.aftermealdiary.item.PostData;
 
 import java.util.ArrayList;
