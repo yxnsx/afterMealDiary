@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.aftermealdiary.adapter.CalendarAdapter;
 import com.example.aftermealdiary.item.PostData;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
@@ -30,6 +31,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     Button button_setting;
     ListView listView_calendar;
 
+    CalendarAdapter calendarAdapter;
     ArrayList<PostData> postDataForCalendar;
     CompactCalendarView compactCalendarView;
 
@@ -66,6 +68,12 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
+
+        // 리스트뷰 데이터 변동 반영 - 구조변경, 아이템변경 둘 다 포함
+        calendarAdapter = new CalendarAdapter(getApplicationContext(), postDataForCalendar);
+        calendarAdapter.notifyDataSetChanged();
+
+        listView_calendar.setAdapter(calendarAdapter);
     }
 
     @Override
