@@ -22,11 +22,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".MapActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="85:1D:41:88:95:79:65:B4:59:36:E2:69:83:52:F6:3F:0D:27:C9:09" />
+            android:value="AIzaSyCzyE2ga4Zn1Z8jK9tSJxH0YCkUHhNVimE" />
 
         <receiver
             android:name=".LocationBroadcastReceiver"
@@ -54,7 +53,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 마이페이지 액티비티 -->
+        </activity> <!-- 지도 액티비티 -->
+        <activity
+            android:name=".MapActivity"
+            android:launchMode="singleTop" />
+        <!-- 마이페이지 액티비티 -->
         <activity
             android:name=".SettingActivity"
             android:launchMode="singleTop">
