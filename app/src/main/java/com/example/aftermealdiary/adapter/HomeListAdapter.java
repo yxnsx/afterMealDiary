@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aftermealdiary.R;
@@ -70,6 +69,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.HomeRe
 
         // sharedPreferences에 저장된 arrayList 값 불러오기
         postDataArrayList = PostData.getArrayListFromSharedPreferences(context);
+        Log.d("디버깅", "HomeListAdapter - addPost(): postDataArrayList = " + postDataArrayList.size());
+
         // 추가한 데이터 값 반영
         postDataArrayList.add(0, postData);
         notifyItemInserted(0);
@@ -101,7 +102,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.HomeRe
 
     public void updatePostSharedPreferences(Context context) throws JSONException {
         // SharedPreferences 객체, 에디터 생성
-        SharedPreferences postSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences postSharedPreferences = context.getSharedPreferences("POST_DATA", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = postSharedPreferences.edit();
 
         // arrayList 값을 담을 JSONArray 생성
