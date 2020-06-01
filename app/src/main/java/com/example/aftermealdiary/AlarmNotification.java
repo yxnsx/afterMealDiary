@@ -67,5 +67,7 @@ public class AlarmNotification extends BroadcastReceiver {
             nextNotifyTime.add(Calendar.DATE, 1);
         }
 
+        Intent serviceIntent = new Intent(context, AlarmService.class);
+        context.startForegroundService(serviceIntent);
     }
 }
