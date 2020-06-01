@@ -179,7 +179,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
         listView_calendar.setAdapter(calendarAdapter);
 
-        // todo 리스트 어댑터.. 아이템.. 클릭시 어댑터에 값 보내주기.. 포스트 액티비티 인텐트값 수정
+        // todo 이벤트 개수 표시
         Log.d("디버깅", "CalendarActivity - onDayClick(): date = " + selectedDate);
 
     }
@@ -192,24 +192,8 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         String calendarInfo = calendarInfoFormatter.format(firstDayOfNewMonth);
 
         textView_calendarInfo.setText(calendarInfo);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
-        String selectedDate = formatter.format(firstDayOfNewMonth);
-
-        try {
-            postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
-            Log.d("디버깅", "CalendarActivity - onDayClick(): postDataForCalendar = " + postDataForCalendar.size());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // 리스트뷰 데이터 변동 반영 - 구조변경, 아이템변경 둘 다 포함
-        calendarAdapter = new CalendarAdapter(getApplicationContext(), postDataForCalendar);
-        calendarAdapter.notifyDataSetChanged();
-
-        listView_calendar.setAdapter(calendarAdapter);
-
+        
+        onDayClick(firstDayOfNewMonth);
     }
 
     @Override
