@@ -7,27 +7,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    CoordinatorLayout coordinatorLayout_mainLayout;
     TextView textView_menuPicker;
     TextView textView_alarm;
     TextView textView_nutrientInfo;
     TextView textView_sendOpinion;
     TextView textView_setting;
-
-    ImageView imageView_weatherIcon;
-    TextView textView_temperature;
-    TextView textView_weatherInfo;
-    TextView textView_cityInfo;
 
     Button button_home;
     Button button_calendar;
@@ -41,17 +33,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_setting);
 
         // 레이아웃 리소스
-        coordinatorLayout_mainLayout = findViewById(R.id.coordinatorLayout_mainLayout);
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
         textView_nutrientInfo = findViewById(R.id.textView_nutrientInfo);
         textView_sendOpinion = findViewById(R.id.textView_sendOpinion);
         textView_setting = findViewById(R.id.textView_setting);
-
-        imageView_weatherIcon = findViewById(R.id.imageView_weatherIcon);
-        textView_temperature = findViewById(R.id.textView_temperature);
-        textView_weatherInfo = findViewById(R.id.textView_weatherInfo);
-        textView_cityInfo = findViewById(R.id.textView_cityInfo);
 
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
