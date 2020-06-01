@@ -39,75 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout_mainLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView_weatherIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="@font/spoqa_han_sans_bold"
-            android:text="- 현재 온도 -"
-            android:textColor="@color/colorPrimary"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView_weatherIcon"
-            app:layout_constraintStart_toEndOf="@+id/imageView_weatherIcon"
-            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
-
-        <TextView
-            android:id="@+id/textView_weatherInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="@font/spoqa_han_sans_regular"
-            android:text="- 현재 날씨 정보 -"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView_weatherIcon"
-            app:layout_constraintStart_toEndOf="@+id/textView_temperature"
-            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
-
-        <TextView
-            android:id="@+id/textView_cityInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:fontFamily="@font/spoqa_han_sans_regular"
-            android:text="- 도시 이름 -"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView_weatherIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
-
-        <ImageView
-            android:id="@+id/imageView_border_00"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="24dp"
-            android:background="@color/colorTransparentBlack"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_weatherIcon" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -123,7 +54,7 @@
             android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_border_00" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView_menuPicker"
