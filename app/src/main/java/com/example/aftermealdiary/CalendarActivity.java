@@ -69,6 +69,22 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
 
+        @SuppressLint("SimpleDateFormat")
+        Date currentDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
+        String selectedDate = formatter.format(currentDate);
+        Log.d("디버깅", "CalendarActivity - onResume(): selectedDate = " + selectedDate);
+
+        // [리사이클러뷰] postDataArrayList 값 가져오기
+        postDataForCalendar = new ArrayList<>();
+
+        try {
+            postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         // 리스트뷰 데이터 변동 반영 - 구조변경, 아이템변경 둘 다 포함
         calendarAdapter = new CalendarAdapter(getApplicationContext(), postDataForCalendar);
         calendarAdapter.notifyDataSetChanged();
@@ -139,15 +155,16 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     public void onDayClick(Date dateClicked) {
 
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
         String selectedDate = formatter.format(dateClicked);
 
         try {
             postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
+            Log.d("디버깅", "CalendarActivity - onDayClick(): postDataForCalendar = " + postDataForCalendar.size());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         // todo 리스트 어댑터.. 아이템.. 클릭시 어댑터에 값 보내주기..
         Log.d("디버깅", "CalendarActivity - onDayClick(): date = " + selectedDate);
 
