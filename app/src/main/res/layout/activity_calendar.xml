@@ -110,7 +110,7 @@
         android:id="@+id/textView_calendarInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/spoqa_han_sans_bold"
         android:gravity="center_horizontal"
         android:text="- 날짜 정보 출력 -"
