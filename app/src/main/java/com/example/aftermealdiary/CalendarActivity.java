@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,6 +26,7 @@ import java.util.Date;
 
 public class CalendarActivity extends AppCompatActivity implements View.OnClickListener, CompactCalendarView.CompactCalendarViewListener, AdapterView.OnItemClickListener {
 
+    TextView textView_calendarInfo;
     Button button_home;
     Button button_calendar;
     Button button_map;
@@ -41,6 +43,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_calendar);
 
         // 레이아웃 리소스
+        textView_calendarInfo = findViewById(R.id.textView_calendarInfo);
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
         button_map = findViewById(R.id.button_map);
@@ -74,6 +77,8 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
         String selectedDate = formatter.format(currentDate);
         Log.d("디버깅", "CalendarActivity - onResume(): selectedDate = " + selectedDate);
+
+        textView_calendarInfo.setText(selectedDate);
 
         // [리사이클러뷰] postDataArrayList 값 가져오기
         postDataForCalendar = new ArrayList<>();
@@ -165,13 +170,19 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        // todo 리스트 어댑터.. 아이템.. 클릭시 어댑터에 값 보내주기..
+        // todo 리스트 어댑터.. 아이템.. 클릭시 어댑터에 값 보내주기.. 포스트 액티비티 인텐트값 수정
         Log.d("디버깅", "CalendarActivity - onDayClick(): date = " + selectedDate);
 
     }
 
     @Override
     public void onMonthScroll(Date firstDayOfNewMonth) {
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM");
+        String calendarInfo = formatter.format(firstDayOfNewMonth);
+
+        textView_calendarInfo.setText(calendarInfo);
 
     }
 
