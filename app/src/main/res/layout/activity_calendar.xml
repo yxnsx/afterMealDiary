@@ -99,9 +99,8 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="360dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/compactCalendarView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
@@ -146,12 +145,12 @@
         android:id="@+id/listView_calendar"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:dividerHeight="0px"
         android:divider="@color/colorBackground"
+        android:dividerHeight="0px"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compactCalendarView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
