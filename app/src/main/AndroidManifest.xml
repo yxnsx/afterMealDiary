@@ -22,6 +22,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".NutrientInfoActivity"></activity>
+
         <service
             android:name=".AlarmService"
             android:enabled="true"
@@ -31,10 +33,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCzyE2ga4Zn1Z8jK9tSJxH0YCkUHhNVimE" />
 
-        <receiver
-            android:name=".LocationBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true" />
         <receiver android:name=".AlarmNotification" /> <!-- 스플래시 액티비티 -->
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -89,27 +87,9 @@
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
         </activity> <!-- 로그인 액티비티 -->
-        <activity
-            android:name=".LoginActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-            </intent-filter>
-        </activity> <!-- 계정생성 액티비티 -->
-        <activity
-            android:name=".SignUpActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-            </intent-filter>
-        </activity> <!-- 캘린더 리스트 액티비티 -->
-        <activity
-            android:name=".CalendarListActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-            </intent-filter>
-        </activity> <!-- 메뉴 룰렛 액티비티 -->
+        <!-- 계정생성 액티비티 -->
+        <!-- 캘린더 리스트 액티비티 -->
+        <!-- 메뉴 룰렛 액티비티 -->
         <activity
             android:name=".MenuPickerActivity"
             android:launchMode="singleTop" /> <!-- 알람 액티비티 -->
