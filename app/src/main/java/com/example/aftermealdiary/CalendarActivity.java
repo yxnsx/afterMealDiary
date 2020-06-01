@@ -1,16 +1,22 @@
 package com.example.aftermealdiary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.aftermealdiary.item.PostData;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
+import org.json.JSONException;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,8 +29,8 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     Button button_setting;
     ListView listView_calendar;
 
+    ArrayList<PostData> postDataForCalendar;
     CompactCalendarView compactCalendarView;
-    private SimpleDateFormat monthFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +128,18 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onDayClick(Date dateClicked) {
 
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        String selectedDate = formatter.format(dateClicked);
+
+        try {
+            postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("디버깅", "CalendarActivity - onDayClick(): date = " + selectedDate);
+        
     }
 
     @Override
