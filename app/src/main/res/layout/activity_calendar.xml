@@ -115,7 +115,7 @@
         android:gravity="center_horizontal"
         android:text="- 날짜 정보 출력 -"
         android:textColor="@color/colorWhite"
-        android:textSize="18sp"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />

@@ -74,16 +74,19 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
         @SuppressLint("SimpleDateFormat")
         Date currentDate = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM");
-        String calendarInfo = formatter.format(currentDate);
+        SimpleDateFormat calendarInfoFormatter = new SimpleDateFormat("yyyy/MM");
+        String calendarInfo = calendarInfoFormatter.format(currentDate);
 
         textView_calendarInfo.setText(calendarInfo);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
+        String selectedDate = formatter.format(currentDate);
 
         // [리사이클러뷰] postDataArrayList 값 가져오기
         postDataForCalendar = new ArrayList<>();
 
         try {
-            postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), calendarInfo);
+            postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
 
         } catch (JSONException e) {
             e.printStackTrace();
