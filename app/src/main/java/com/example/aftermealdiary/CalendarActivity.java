@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -21,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class CalendarActivity extends AppCompatActivity implements View.OnClickListener, CompactCalendarView.CompactCalendarViewListener {
+public class CalendarActivity extends AppCompatActivity implements View.OnClickListener, CompactCalendarView.CompactCalendarViewListener, AdapterView.OnItemClickListener {
 
     Button button_home;
     Button button_calendar;
@@ -50,6 +51,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         button_calendar.setOnClickListener(this);
         button_map.setOnClickListener(this);
         button_setting.setOnClickListener(this);
+        listView_calendar.setOnItemClickListener(this);
 
         // 캘린더뷰 설정
         compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
@@ -138,12 +140,22 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
             e.printStackTrace();
         }
 
+        // todo 리스트 어댑터.. 아이템.. 클릭시 어댑터에 값 보내주기..
         Log.d("디버깅", "CalendarActivity - onDayClick(): date = " + selectedDate);
-        
+
     }
 
     @Override
     public void onMonthScroll(Date firstDayOfNewMonth) {
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intentPost = new Intent(this, PostActivity.class);
+        intentPost.putExtra("intentFrom", "calendarList");
+        intentPost.putExtra("selectedPost", postDataForCalendar.get(position));
+        intentPost.putExtra("position", position);
+        startActivity(intentPost);
     }
 }
