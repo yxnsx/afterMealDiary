@@ -99,8 +99,23 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/compactCalendarView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
+
+    <TextView
+        android:id="@+id/textView_calendarInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/spoqa_han_sans_bold"
+        android:gravity="center_horizontal"
+        android:text="- 날짜 정보 출력 -"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
@@ -111,6 +126,7 @@
         android:layout_height="250dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:paddingLeft="10dp"
@@ -122,9 +138,9 @@
         app:compactCalendarTargetHeight="250dp"
         app:compactCalendarTextColor="@color/colorWhite"
         app:compactCalendarTextSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_calendarInfo" />
 
     <ListView
         android:id="@+id/listView_calendar"
