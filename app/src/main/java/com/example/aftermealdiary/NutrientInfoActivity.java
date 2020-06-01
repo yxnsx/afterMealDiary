@@ -2,7 +2,6 @@ package com.example.aftermealdiary;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -13,6 +12,9 @@ public class NutrientInfoActivity extends AppCompatActivity implements View.OnCl
     ImageButton imageButton_backArrow;
     ListView listview_nutrientInfo;
 
+    String key = "bfe27fe32dde406c8969";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +24,6 @@ public class NutrientInfoActivity extends AppCompatActivity implements View.OnCl
         listview_nutrientInfo = findViewById(R.id.listview_nutrientInfo);
 
         imageButton_backArrow.setOnClickListener(this);
-
     }
 
     @Override
