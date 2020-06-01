@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,14 +12,16 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
-public class CalendarActivity extends AppCompatActivity implements View.OnClickListener {
+public class CalendarActivity extends AppCompatActivity implements View.OnClickListener, CompactCalendarView.CompactCalendarViewListener {
 
     Button button_home;
     Button button_calendar;
     Button button_map;
     Button button_setting;
+    ListView listView_calendar;
 
     CompactCalendarView compactCalendarView;
     private SimpleDateFormat monthFormat;
@@ -33,6 +36,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         button_calendar = findViewById(R.id.button_calendar);
         button_map = findViewById(R.id.button_map);
         button_setting = findViewById(R.id.button_setting);
+        listView_calendar = findViewById(R.id.listView_calendar);
         compactCalendarView = findViewById(R.id.compactCalendarView);
 
         // 클릭리스너 설정
@@ -43,6 +47,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
         // 캘린더뷰 설정
         compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
+        compactCalendarView.setListener(this);
     }
 
     @Override
@@ -112,5 +117,15 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onDayClick(Date dateClicked) {
+
+    }
+
+    @Override
+    public void onMonthScroll(Date firstDayOfNewMonth) {
+
     }
 }
