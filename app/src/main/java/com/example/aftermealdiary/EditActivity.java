@@ -1,13 +1,5 @@
 package com.example.aftermealdiary;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.aftermealdiary.adapter.HomeListAdapter;
 import com.example.aftermealdiary.item.PostData;
@@ -288,13 +287,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         } else if (intentFrom.equals("calendarList")) {
 
             // 캘린더 리스트로 되돌아가는 인텐트 설정
-            Intent intentCalendarList = new Intent(getApplicationContext(), CalendarListActivity.class);
-            try {
-                intentCalendarList.putExtra("selectedDate", intentPostDate);
-                intentCalendarList.putParcelableArrayListExtra("selectedDatePost", PostData.getDateArrayFromSharedPreferences(getApplicationContext(), intentPostDate));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Intent intentCalendarList = new Intent(getApplicationContext(), CalendarActivity.class);
             startActivity(intentCalendarList);
             Log.d("디버깅", "PostActivity - onBackPressed(): " + intentFrom);
 
