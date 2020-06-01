@@ -66,5 +66,6 @@ public class AlarmNotification extends BroadcastReceiver {
             // 다음날 같은 시간으로 알람시간 결정
             nextNotifyTime.add(Calendar.DATE, 1);
         }
+
     }
 }

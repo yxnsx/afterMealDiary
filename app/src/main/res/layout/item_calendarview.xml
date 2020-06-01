@@ -148,7 +148,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
         android:numColumns="7"
-        android:verticalSpacing="24dp"
+        android:verticalSpacing="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
