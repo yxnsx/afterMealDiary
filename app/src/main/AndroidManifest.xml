@@ -22,6 +22,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".NutrientInfoActivity"></activity>
+
         <service
             android:name=".AlarmService"
             android:enabled="true"

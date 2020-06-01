@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 
 import com.example.aftermealdiary.CalendarListActivity;
 import com.example.aftermealdiary.R;
-import com.example.aftermealdiary.adapter.CalendarGridAdapter;
 
 import org.json.JSONException;
 
