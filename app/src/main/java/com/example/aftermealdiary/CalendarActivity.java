@@ -15,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.aftermealdiary.adapter.CalendarAdapter;
 import com.example.aftermealdiary.item.PostData;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 
 import org.json.JSONException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +37,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
     CalendarAdapter calendarAdapter;
     ArrayList<PostData> postDataForCalendar;
+    ArrayList<PostData> postDataForEvent;
     CompactCalendarView compactCalendarView;
 
     @Override
@@ -59,6 +62,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         listView_calendar.setOnItemClickListener(this);
 
         // 캘린더뷰 설정
+        compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
         compactCalendarView.setListener(this);
     }
@@ -71,6 +75,14 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
+
+        try {
+            setEvents();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         @SuppressLint("SimpleDateFormat")
         Date currentDate = new Date();
@@ -158,6 +170,25 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         overridePendingTransition(0, 0);
     }
 
+    public void setEvents() throws JSONException, ParseException {
+        postDataForEvent = PostData.getArrayListFromSharedPreferences(getApplicationContext());
+
+        for(int i = 0; i < postDataForEvent.size(); i++) {
+
+            PostData postData = postDataForEvent.get(i);
+
+            @SuppressLint("SimpleDateFormat")
+            Date postDate = new SimpleDateFormat("yy/MM/dd").parse(postData.getPostDate());
+
+            long postDateTime = postDate.getTime();
+
+            Event postEvent = new Event(R.color.colorAccent, postDateTime, "");
+            compactCalendarView.addEvent(postEvent);
+
+            Log.d("디버깅", "CalendarActivity - setEvents(): postData " + i + " 추가됨");
+        }
+    }
+
     @Override
     @SuppressLint("SimpleDateFormat")
     public void onDayClick(Date dateClicked) {
@@ -192,7 +223,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         String calendarInfo = calendarInfoFormatter.format(firstDayOfNewMonth);
 
         textView_calendarInfo.setText(calendarInfo);
-        
+
         onDayClick(firstDayOfNewMonth);
     }
 
