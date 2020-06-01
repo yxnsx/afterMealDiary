@@ -1,7 +1,5 @@
 package com.example.aftermealdiary;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aftermealdiary.adapter.HomeListAdapter;
 import com.example.aftermealdiary.item.PostData;
@@ -212,13 +212,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         } else if(intentFrom.equals("calendarList")) {
 
             // 캘린더 리스트로 되돌아가는 인텐트 설정
-            Intent intentCalendarList = new Intent(getApplicationContext(), CalendarListActivity.class);
-            try {
-                intentCalendarList.putExtra("selectedDate", textView_postDate.getText().toString());
-                intentCalendarList.putParcelableArrayListExtra("selectedDatePost", PostData.getDateArrayFromSharedPreferences(getApplicationContext(), textView_postDate.getText().toString()));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Intent intentCalendarList = new Intent(getApplicationContext(), CalendarActivity.class);
             startActivity(intentCalendarList);
             Log.d("디버깅", "PostActivity - onBackPressed(): " + intentFrom);
 
