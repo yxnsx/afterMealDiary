@@ -263,7 +263,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                     e.printStackTrace();
                 }
 
-                // index값이 contactDataArrayList 최대값과 같아면 0으로 초기화해서 다시 while문을 돌 수 있도록 함
+                // index값이 contactDataArrayList 최대값과 같다면 0으로 초기화해서 다시 while문을 돌 수 있도록 함
                 if (index == contactDataArrayList.size()) {
                     index = 0;
                 }
@@ -289,7 +289,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected void onPostExecute(ContactData contactData) {
-            super.onPostExecute(contactData);
+           super.onPostExecute(contactData);
         }
     }
 }
