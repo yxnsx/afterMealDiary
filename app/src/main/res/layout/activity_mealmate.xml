@@ -41,6 +41,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_confettie"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_contactInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false" />
+
     <ImageView
         android:id="@+id/imageView_image"
         android:layout_width="128dp"
