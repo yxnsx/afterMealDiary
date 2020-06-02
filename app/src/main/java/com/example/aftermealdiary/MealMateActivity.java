@@ -11,9 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aftermealdiary.item.ContactData;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MealMateActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,7 +50,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
         while (cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
+            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
 
             contactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
             if (contactCursor.moveToFirst()) {
