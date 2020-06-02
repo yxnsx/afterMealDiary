@@ -42,6 +42,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
     ArrayList<ContactData> contactDataArrayList;
 
     MealMatePickerTask mealMatePickerTask;
+    ContactsTask contactsTask;
 
     int index;
     boolean isRunning;
@@ -75,7 +76,9 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
         // 퍼미션 요청 수락시
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            getContacts();
+            // 새로운 AsyncTask 생성 후 실행
+            contactsTask = new ContactsTask();
+            contactsTask.execute();
 
         } else { // 퍼미션 요청 거절시
             // 퍼미션 재요청
@@ -119,7 +122,6 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
         }
-
     }
 
     public void requestContactsPermission() {
@@ -157,30 +159,38 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private ArrayList getContacts() {
-        cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
-        contactDataArrayList = new ArrayList<>();
+    private class ContactsTask extends AsyncTask<ArrayList, ContactData, ArrayList> {
 
-        while (cursor.moveToNext()) {
-            String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
-
-            contactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
-            if (contactCursor.moveToFirst()) {
-
-                String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-                ContactData contactData = new ContactData(name, contact);
-
-                Log.d("디버깅", "MealMateActivity - getContacts(): name = " + name);
-
-                contactDataArrayList.add(contactData);
-            }
-
-            contactCursor.close();
+        @Override
+        protected void onPreExecute() {
+            contactDataArrayList = new ArrayList<>();
         }
-        cursor.close();
-        return contactDataArrayList;
+
+        @Override
+        protected ArrayList doInBackground(ArrayList... arrayLists) {
+            cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
+
+                contactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
+                if (contactCursor.moveToFirst()) {
+
+                    String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+                    ContactData contactData = new ContactData(name, contact);
+
+                    Log.d("디버깅", "MealMateActivity - getContacts(): name = " + name);
+
+                    contactDataArrayList.add(contactData);
+                }
+
+                contactCursor.close();
+            }
+            cursor.close();
+            return contactDataArrayList;
+        }
     }
 
     @SuppressLint("StaticFieldLeak") // doInBackground, onProgressUpdate, onPostExecute의 매개변수 자료형
