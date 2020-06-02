@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -22,7 +23,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".NutrientInfoActivity"></activity>
 
         <service
             android:name=".AlarmService"
@@ -86,9 +86,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity> <!-- 로그인 액티비티 -->
-        <!-- 계정생성 액티비티 -->
-        <!-- 캘린더 리스트 액티비티 -->
+        </activity>
         <!-- 메뉴 룰렛 액티비티 -->
         <activity
             android:name=".MenuPickerActivity"
@@ -96,6 +94,8 @@
         <activity
             android:name=".AlarmActivity"
             android:launchMode="singleTop" />
+        <activity android:name=".MealMateActivity"
+            android:launchMode="singleTop"/>
     </application>
 
 </manifest>
