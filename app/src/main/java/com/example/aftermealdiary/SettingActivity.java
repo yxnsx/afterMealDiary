@@ -2,14 +2,12 @@ package com.example.aftermealdiary;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -32,7 +30,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        // 레이아웃 리소스
+        // 레이아웃 리소스 설정
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
         textView_mealMate = findViewById(R.id.textView_mealMate);
@@ -60,42 +58,6 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void onStart() {
-        super.onStart();
-
-        Log.d("디버깅", "MyPageActivity - onStart(): ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.d("디버깅", "MyPageActivity - onResume(): ");
-    }
-
-    @Override
-    protected void onPause() {
-
-        super.onPause();
-        Log.d("디버깅", "MyPageActivity - onPause(): ");
-    }
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-        Log.d("디버깅", "MyPageActivity - onStop(): ");
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-        Log.d("디버깅", "MyPageActivity - onDestroy(): ");
-    }
-
-    @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -116,6 +78,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(0, 0);
                 break;
 
+            // 지도 버튼을 클릭했을 경우
             case R.id.button_map:
                 Intent intentMap = new Intent(this, MapActivity.class);
                 startActivity(intentMap);
@@ -131,29 +94,30 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(0, 0);
                 break;
 
+            // 메뉴 룰렛 버튼을 클릭했을 경우
             case R.id.textView_menuPicker:
                 Intent intentMenuPicker = new Intent(getApplicationContext(), MenuPickerActivity.class);
                 intentMenuPicker.putExtra("intentFrom", "setting");
                 startActivity(intentMenuPicker);
                 break;
 
+            // 알람 설정하기 버튼을 클릭했을 경우
             case R.id.textView_alarm:
                 Intent intentAlarm = new Intent(getApplicationContext(), AlarmActivity.class);
                 startActivity(intentAlarm);
                 break;
 
+            // 식사메이트 뽑기 버튼을 클릭했을 경우
             case R.id.textView_mealMate:
                 Intent intentMealMate = new Intent(getApplicationContext(), MealMateActivity.class);
                 startActivity(intentMealMate);
                 break;
 
+            // 의견보내기 버튼을 클릭했을 경우
             case R.id.textView_sendOpinion:
                 Intent intentMail = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:cw2cu96@gmail.com"));
                 startActivity(intentMail);
                 break;
-
-            /*case R.id.textView_setting:
-                break;*/
         }
     }
 
