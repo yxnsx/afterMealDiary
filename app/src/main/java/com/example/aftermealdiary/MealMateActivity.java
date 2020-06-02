@@ -1,10 +1,14 @@
 package com.example.aftermealdiary;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,7 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.aftermealdiary.item.ContactData;
@@ -38,6 +45,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
     int index;
     boolean isRunning;
+    int PERMISSION_CONTACTS = 50;
 
 
     @Override
@@ -62,6 +70,21 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        // 퍼미션 요청 수락시
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            getContacts();
+
+        } else { // 퍼미션 요청 거절시
+            // 퍼미션 재요청
+            requestContactsPermission();
+            Log.d("디버깅", "MealMateActivity - onStart(): requestContactsPermission");
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
@@ -70,12 +93,17 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.button_startPicker:
-                // AsyncTask 상태를 제어하기 위한 boolean 값
-                isRunning = true;
 
-                // 새로운 AsyncTask 생성 후 실행
-                mealMatePickerTask = new MealMatePickerTask();
-                mealMatePickerTask.execute();
+                if (contactDataArrayList != null) {
+                    // AsyncTask 상태를 제어하기 위한 boolean 값
+                    isRunning = true;
+
+                    // 새로운 AsyncTask 생성 후 실행
+                    mealMatePickerTask = new MealMatePickerTask();
+                    mealMatePickerTask.execute();
+                } else {
+                    Toast.makeText(this, "불러올 연락처 정보가 없습니다", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.button_stopPicker:
@@ -94,7 +122,42 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void getContacts() {
+    public void requestContactsPermission() {
+
+        // 사용자가 이전에 요청을 거부한 경우 true를 반환하고 사용자가 권한을 거부하고 권한 요청 대화상자에서 다시 묻지 않음 옵션을 선택했거나 기기 정책상 이 권한을 금지하는 경우 false를 반환
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+
+            // 다이얼로그 설정
+            new AlertDialog.Builder(this)
+                    .setTitle("접근 권한 설정")
+                    .setMessage("식사 메이트 뽑기를 위해서는 연락처 접근 권한이 필요합니다.")
+
+                    // 권한 허용 버튼 클릭시
+                    .setPositiveButton("허용", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 퍼미션 창 보여주기
+                            ActivityCompat.requestPermissions(MealMateActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
+                        }
+                    })
+
+                    // 권한 거부 버튼 클릭시
+                    .setNegativeButton("거부", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 토스트 메시지 출력 후 다이얼로그 종료
+                            Toast.makeText(MealMateActivity.this, "권한이 거부되었습니다", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+        } else { // TODO 이 부분 알아보기
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
+        }
+    }
+
+    private ArrayList getContacts() {
         cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
         contactDataArrayList = new ArrayList<>();
 
@@ -108,12 +171,16 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                 String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 
                 ContactData contactData = new ContactData(name, contact);
+
+                Log.d("디버깅", "MealMateActivity - getContacts(): name = " + name);
+
                 contactDataArrayList.add(contactData);
             }
 
             contactCursor.close();
         }
         cursor.close();
+        return contactDataArrayList;
     }
 
     @SuppressLint("StaticFieldLeak") // doInBackground, onProgressUpdate, onPostExecute의 매개변수 자료형
@@ -150,15 +217,16 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
             return contactDataArrayList.get(index);
         }
 
+        @SuppressLint("SetTextI18n")
         @Override // publishProgress()의 값이 넘어옴
         protected void onProgressUpdate(ContactData... values) {
             super.onProgressUpdate(values);
 
-            /*// 얻은 데이터 바탕으로 레이아웃 리소스 재설정
-            imageView_menuImage.setBackground(values[0].getMenuIcon());
-            textView_menuPickerInfo.setText(values[0].getPickerInfo());
-            textView_menuInfo.setText(values[0].getMenuName());
-            textView_additionalInfo.setText(values[0].getAdditionalInfo());*/
+            // 얻은 데이터 바탕으로 레이아웃 리소스 재설정
+            //imageView_menuImage.setBackground(values[0].getMenuIcon());
+            textView_mealMateInfo.setText("오늘 식사는");
+            textView_contactInfo.setText(values[0].getName() + "님과");
+            textView_additionalInfo.setText("함께하면 어떨까요?");
 
         }
 
