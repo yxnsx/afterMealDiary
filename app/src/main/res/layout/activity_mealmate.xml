@@ -42,18 +42,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_blob"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textView_contactInfo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_container"
-        app:lottie_autoPlay="false"
-        app:lottie_loop="true" />
-
-    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_confetti"
         android:layout_width="match_parent"
         android:layout_height="0dp"
