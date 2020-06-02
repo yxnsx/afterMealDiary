@@ -47,7 +47,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         // 클릭리스너 설정
         textView_menuPicker.setOnClickListener(this);
         textView_alarm.setOnClickListener(this);
-        textView_nutrientInfo.setOnClickListener(this);
+        textView_recipeInfo.setOnClickListener(this);
         textView_sendOpinion.setOnClickListener(this);
         textView_setting.setOnClickListener(this);
 
