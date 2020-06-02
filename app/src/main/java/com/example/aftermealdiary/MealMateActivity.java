@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +31,8 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
     Cursor cursor;
     Cursor contactCursor;
     ArrayList<ContactData> contactDataArrayList;
+
+    MealMatePickerTask mealMatePickerTask;
 
     int index;
     boolean isRunning;
@@ -62,6 +65,27 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.imageButton_backArrow:
                 onBackPressed();
+                break;
+
+            case R.id.button_startPicker:
+                // AsyncTask 상태를 제어하기 위한 boolean 값
+                isRunning = true;
+
+                // 새로운 AsyncTask 생성 후 실행
+                mealMatePickerTask = new MealMatePickerTask();
+                mealMatePickerTask.execute();
+                break;
+
+            case R.id.button_stopPicker:
+                // AsyncTask가 생성된 상태일 경우
+                if (mealMatePickerTask != null) {
+                    isRunning = false;
+                    mealMatePickerTask.cancel(true);
+
+                } else { // AsyncTask가 null일 경우
+                    Toast.makeText(this, "룰렛 시작하기 버튼을 먼저 눌러주세요", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
 
     }
