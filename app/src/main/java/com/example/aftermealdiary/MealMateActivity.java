@@ -6,8 +6,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +20,12 @@ import java.util.ArrayList;
 public class MealMateActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton imageButton_backArrow;
-    ListView listView_contact;
+    ImageView imageView_image;
+    TextView textView_mealMateInfo;
+    TextView textView_contactInfo;
+    TextView textView_additionalInfo;
+    Button button_startPicker;
+    Button button_stopPicker;
 
     Cursor cursor;
     Cursor contactCursor;
@@ -34,9 +41,16 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_mealmate);
 
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
-        listView_contact = findViewById(R.id.listView_contact);
+        imageView_image = findViewById(R.id.imageView_image);
+        textView_mealMateInfo = findViewById(R.id.textView_mealMateInfo);
+        textView_contactInfo = findViewById(R.id.textView_contactInfo);
+        textView_additionalInfo = findViewById(R.id.textView_additionalInfo);
+        button_startPicker = findViewById(R.id.button_startPicker);
+        button_stopPicker = findViewById(R.id.button_stopPicker);
 
         imageButton_backArrow.setOnClickListener(this);
+        button_startPicker.setOnClickListener(this);
+        button_stopPicker.setOnClickListener(this);
 
         // AsyncTask 상태를 제어하기 위한 boolean 값
         isRunning = false;
