@@ -142,6 +142,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intentAlarm);
                 break;
 
+            case R.id.textView_mealMate:
+                Intent intentMealMate = new Intent(getApplicationContext(), MealMateActivity.class);
+                startActivity(intentMealMate);
+                break;
+
             case R.id.textView_sendOpinion:
                 Intent intentMail = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:cw2cu96@gmail.com"));
                 startActivity(intentMail);
