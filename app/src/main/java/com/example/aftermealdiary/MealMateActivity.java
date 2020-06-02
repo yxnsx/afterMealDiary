@@ -2,12 +2,14 @@ package com.example.aftermealdiary;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,13 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.aftermealdiary.item.ContactData;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -36,6 +40,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
     Button button_startPicker;
     Button button_stopPicker;
     LottieAnimationView lottie_confetti;
+    CoordinatorLayout coordinatorLayout_snackBarHolder;
 
     Cursor cursor;
     Cursor contactCursor;
@@ -62,6 +67,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         button_startPicker = findViewById(R.id.button_startPicker);
         button_stopPicker = findViewById(R.id.button_stopPicker);
         lottie_confetti = findViewById(R.id.lottie_confetti);
+        coordinatorLayout_snackBarHolder = findViewById(R.id.coordinatorLayout_snackBarHolder);
 
         imageButton_backArrow.setOnClickListener(this);
         button_startPicker.setOnClickListener(this);
@@ -83,7 +89,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
         } else { // 퍼미션 요청 거절시
             // 퍼미션 재요청
-            requestContactsPermission();
+            ActivityCompat.requestPermissions(MealMateActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
             Log.d("디버깅", "MealMateActivity - onStart(): requestContactsPermission");
         }
     }
@@ -125,38 +131,39 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void requestContactsPermission() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
 
-        // 사용자가 이전에 요청을 거부한 경우 true를 반환하고 사용자가 권한을 거부하고 권한 요청 대화상자에서 다시 묻지 않음 옵션을 선택했거나 기기 정책상 이 권한을 금지하는 경우 false를 반환
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+        if (requestCode == PERMISSION_CONTACTS) {
+            // 퍼미션을 허용했을 경우
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 새로운 AsyncTask 생성 후 실행
+                contactsTask = new ContactsTask();
+                contactsTask.execute();
 
-            // 다이얼로그 설정
-            new AlertDialog.Builder(this)
-                    .setTitle("접근 권한 설정")
-                    .setMessage("식사 메이트 뽑기를 위해서는 연락처 접근 권한이 필요합니다.")
+            } else {
+                // todo 여기 조건이 잘못되어서 계속 액티비티 생성과 동시에 스낵바 뜨는듯
+                Snackbar.make(
+                        coordinatorLayout_snackBarHolder,
+                        "식사 메이트 뽑기를 위해서는 \n연락처 접근 권한이 필요합니다",
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction("설정", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                    // 권한 허용 버튼 클릭시
-                    .setPositiveButton("허용", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // 퍼미션 창 보여주기
-                            ActivityCompat.requestPermissions(MealMateActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
-                        }
-                    })
-
-                    // 권한 거부 버튼 클릭시
-                    .setNegativeButton("거부", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // 토스트 메시지 출력 후 다이얼로그 종료
-                            Toast.makeText(MealMateActivity.this, "권한이 거부되었습니다", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
-
-        } else { // TODO 이 부분 알아보기
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
+                                Intent intent = new Intent();
+                                intent.setAction(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package",
+                                        BuildConfig.APPLICATION_ID, null);
+                                intent.setData(uri);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
         }
     }
 
@@ -236,7 +243,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
             // 얻은 데이터 바탕으로 레이아웃 리소스 재설정
             //imageView_menuImage.setBackground(values[0].getMenuIcon());
             textView_mealMateInfo.setText("오늘 식사는");
-            textView_contactInfo.setText(values[0].getName() + "님과");
+            textView_contactInfo.setText(values[0].getName() + " 님과");
             textView_additionalInfo.setText("함께하면 어떨까요?");
 
         }

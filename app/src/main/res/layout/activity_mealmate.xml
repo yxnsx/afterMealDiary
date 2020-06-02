@@ -118,7 +118,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_contactInfo" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout_snackBarHolder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lottie_confetti" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -131,12 +141,12 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:fontFamily="@font/spoqa_han_sans_bold"
             android:text="룰렛 시작하기"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
-            android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_stopPicker"
             app:layout_constraintHorizontal_bias="0.0"
@@ -147,12 +157,12 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="@color/colorAccent"
             android:fontFamily="@font/spoqa_han_sans_bold"
             android:text="룰렛 멈추기"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
-            android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
