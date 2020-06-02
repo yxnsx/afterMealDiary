@@ -16,7 +16,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipeinfo);
+        setContentView(R.layout.activity_mealmate);
 
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
         listView_recipeInfo = findViewById(R.id.listView_recipeInfo);
