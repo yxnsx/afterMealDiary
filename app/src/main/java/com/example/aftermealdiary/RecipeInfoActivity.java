@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RecipeInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton imageButton_backArrow;
-    ListView listview_nutrientInfo;
+    ListView listView_recipeInfo;
 
     String key = "bfe27fe32dde406c8969";
 
@@ -21,7 +21,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_recipeinfo);
 
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
-        listview_nutrientInfo = findViewById(R.id.listview_nutrientInfo);
+        listView_recipeInfo = findViewById(R.id.listView_recipeInfo);
 
         imageButton_backArrow.setOnClickListener(this);
     }
