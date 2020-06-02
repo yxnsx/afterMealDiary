@@ -47,7 +47,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        // 레이아웃 리소스
+        // 레이아웃 리소스 설정
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
         button_popupMenu = findViewById(R.id.button_popupMenu);
 
@@ -66,6 +66,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             intentFrom = getIntent().getStringExtra("intentFrom");
             PostData getPostData = getIntent().getParcelableExtra("selectedPost");
 
+            // String값으로 넘어온 이미지 정보를 URI 포맷으로 변환
             imageUri = Uri.parse(getPostData.getPostImage());
 
             // 받아온 데이터 레이아웃 리소스에 반영
@@ -97,10 +98,12 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
 
+            // 뒤로가기 버튼 클릭시
             case R.id.imageButton_backArrow:
                 onBackPressed();
                 break;
 
+            // 팝업메뉴 버튼 클릭시
             case R.id.button_popupMenu:
                 Log.d("디버깅", "PostActivity - onClick(): 팝업메뉴 클릭됨");
 
@@ -112,16 +115,16 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
 
-                            // 수정하기 클릭했을 경우
+                            // 수정하기를 클릭했을 경우
                             case R.id.popupMenu_edit:
 
                                 // 넘겨줄 데이터 추출
-                                String postImage = imageUri.toString(); // 별도 패스 추출 메소드 사용하지 않고 .toString으로 넘겨주니 이미지 뜸..
+                                String postImage = imageUri.toString();
                                 String postDate = textView_postDate.getText().toString();
                                 String postTitle = textView_postTitle.getText().toString();
                                 String postText = textView_postText.getText().toString();
 
-                                // 넘겨줄 데이터 담기
+                                // 넘겨줄 데이터 인텐트에 담기
                                 Intent editPost = new Intent(PostActivity.this, EditActivity.class);
                                 editPost.putExtra("postImage", postImage);
                                 editPost.putExtra("postDate", postDate);
@@ -132,7 +135,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 
                                 break;
 
-                            // 삭제하기 클릭했을 경우
+                            // 삭제하기를 클릭했을 경우
                             case R.id.popupMenu_delete:
 
                                 // 삭제한 Post 값 반영 (arrayList, sharedPreferences)
@@ -155,8 +158,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // onResume 전에 실행
-    @Override
+    @Override // onResume 전에 실행
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
