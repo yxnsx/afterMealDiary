@@ -41,7 +41,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void getContact() {
+    private void getContacts() {
         cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
 
         while (cursor.moveToNext()) {
