@@ -371,7 +371,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     try { // 3초에 한 번 배너 바뀌도록 설정
                         sleep(3000);
                         index++;
-                        
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
