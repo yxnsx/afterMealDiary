@@ -3,7 +3,6 @@ package com.example.aftermealdiary;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -37,7 +36,7 @@ public class AlarmData {
             editor.putString("alarmData" + i, convertArrayListToString(alarmDataArrayList.get(i)));
         }
 
-        // amountOfAlarm 값은 getAlarmArrayListFromSharedPreferences에서 사용 - amountOfAlarm 만큼 for문 반복
+        // amountOfAlarm 값은 getAlarmArrayListFromSharedPreferences()에서 사용 - amountOfAlarm 만큼 for문 반복
         editor.putInt("amountOfAlarm", alarmDataArrayList.size());
         editor.apply();
         editor.commit();
@@ -62,10 +61,10 @@ public class AlarmData {
 
     private static String convertArrayListToString(AlarmData alarmData) {
 
-        // 각 객체를 담을 어레이리스트 생성
+        // 각 알람 객체를 담을 어레이리스트 생성
         ArrayList<String> stringAlarmData = new ArrayList<>();
 
-        // 어레이리스트에 각 객체의 데이터 담기 //todo 이 코드가 필요한 이유에 대해 작성하는 편이 좋음
+        // 어레이리스트에 각 객체의 데이터 담기
         stringAlarmData.add(alarmData.getAlarmHour()); // 알람 시간
         stringAlarmData.add(alarmData.getAlarmMinute()); // 알람 분
         stringAlarmData.add(alarmData.getAlarmInfo()); // 알람 정보
@@ -87,7 +86,7 @@ public class AlarmData {
         // 넘어온 stringAlarmData를 stringForSplit 기준으로 구분하여 배열에 담기 (stringForSplit = "@@@###&&&")
         String[] alarmDataString = stringAlarmData.split(stringForSplit);
 
-        // 배열에 담긴 순서대로 각 데이터 꺼내기 //todo 왜 꺼내지고, 꺼내진 후에는 어디에 사용되는지
+        // 배열에 담긴 순서대로 각 데이터 꺼내기
         String hour = alarmDataString[0];
         String minute = alarmDataString[1];
         String info = alarmDataString[2];
