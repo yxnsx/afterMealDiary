@@ -187,6 +187,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                         })
                         .show();
             }
+
         }
     }
 

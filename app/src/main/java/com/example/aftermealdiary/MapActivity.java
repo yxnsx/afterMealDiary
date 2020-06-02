@@ -206,6 +206,8 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                     setCurrentLocation(location, markerTitle, markerSnippet);
 
                     currentLocation = location;
+
+                    showPlaceInformation(currentPosition);
                 }
 
 
@@ -503,8 +505,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void showPlaceInformation(LatLng location)
-    {
+    public void showPlaceInformation(LatLng location) {
         googleMap.clear();//지도 클리어
 
         if (previous_marker != null)
