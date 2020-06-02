@@ -85,7 +85,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         button_map.setOnClickListener(this);
         button_setting.setOnClickListener(this);
         floatingActionButton_write.setOnClickListener(this);
-
     }
 
 
@@ -225,17 +224,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intentCalendar);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
-
-                bannerHandler.sendEmptyMessage(SEND_STOP);
                 break;
 
+            // 지도 버튼을 클릭했을 경우
             case R.id.button_map:
                 Intent intentMap = new Intent(this, MapActivity.class);
                 startActivity(intentMap);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
-
-                bannerHandler.sendEmptyMessage(SEND_STOP);
                 break;
 
             // 세팅 버튼을 클릭했을 경우
@@ -244,18 +240,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intentMypage);
                 // 화면 트랜지션 없도록 설정
                 overridePendingTransition(0, 0);
-
-                bannerHandler.sendEmptyMessage(SEND_STOP);
                 break;
 
             // 글 작성하기 버튼을 클릭했을 경우
             case R.id.floatingActionButton_write:
-                Log.d("디버깅", "HomeActivity - onClick(): 글 작성하기");
-
                 Intent intentWrite = new Intent(this, WriteActivity.class);
                 startActivity(intentWrite);
-
-                bannerHandler.sendEmptyMessage(SEND_STOP);
                 break;
         }
     }
@@ -311,7 +301,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다", Toast.LENGTH_LONG).show();
             return;
         }
-        // 재설정된 pressedTime + 2000이 현재시간보다 클 경우 앱 종료(2초 내에 다시 뒤로가기 버튼 눌렀을 경우)
+        // 재설정된 pressedTime + 2000이 현재시간보다 클 경우 앱 종료 (2초 내에 다시 뒤로가기 버튼 눌렀을 경우)
         if (System.currentTimeMillis() <= pressedTime + 2000) {
             bannerHandler.sendEmptyMessage(SEND_STOP);
             finish();
@@ -339,16 +329,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             switch (msg.what) {
 
                 case SEND_BANNERDATA:
-
                     // Thread에서 변화하는 bannerCount 값 바탕으로 배너 리소스 설정
-                    imageView_bannerBackground.setBackgroundColor
-                            (bannerDataArrayList.get(index).getBackgroundColor());
-                    imageView_bannerCircle.setColorFilter
-                            (bannerDataArrayList.get(index).getCircleColor());
-                    textView_bannerTitle.setText
-                            (bannerDataArrayList.get(index).getTitle());
+                    imageView_bannerBackground.setBackgroundColor(bannerDataArrayList.get(index).getBackgroundColor());
+                    imageView_bannerCircle.setColorFilter(bannerDataArrayList.get(index).getCircleColor());
+                    textView_bannerTitle.setText(bannerDataArrayList.get(index).getTitle());
                     bannerInfo = bannerDataArrayList.get(index).getInfo();
-
                     break;
 
                 case SEND_STOP:
@@ -385,8 +370,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                     try { // 3초에 한 번 배너 바뀌도록 설정
                         sleep(3000);
-                        Log.d("디버깅", "Thread - run(): " + textView_bannerTitle.getText());
                         index++;
+                        
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
