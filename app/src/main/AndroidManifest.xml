@@ -94,7 +94,7 @@
         <activity
             android:name=".AlarmActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".RecipeInfoActivity"
+        <activity android:name=".MealMateActivity"
             android:launchMode="singleTop"/>
     </application>
 

@@ -7,10 +7,10 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RecipeInfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class MealMateActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton imageButton_backArrow;
-    ListView listView_recipeInfo;
+    ListView listView_contact;
 
 
     @Override
@@ -19,7 +19,7 @@ public class RecipeInfoActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_mealmate);
 
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
-        listView_recipeInfo = findViewById(R.id.listView_recipeInfo);
+        listView_contact = findViewById(R.id.listView_contact);
 
         imageButton_backArrow.setOnClickListener(this);
     }
