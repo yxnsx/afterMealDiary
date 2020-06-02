@@ -18,12 +18,12 @@ import java.util.Calendar;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class AlarmNotification extends BroadcastReceiver {
 
-    NotificationManager notificationManager;
     NotificationChannel channel;
+    NotificationManager notificationManager;
     NotificationCompat.Builder notificationBuilder;
 
-    String channelName = "alarmNotification"; // 푸시 그룹들로 묶인 채널을 사용자가 받을지 안받을지 제어할 수 있도록 하는 역할
     String description = "setNotification";
+    String channelName = "alarmNotification"; // 푸시 그룹들로 묶인 채널을 사용자가 받을지 안받을지 제어할 수 있도록 하는 역할
     int importance = NotificationManager.IMPORTANCE_HIGH; //소리와 알림메시지를 같이 보여줌
 
 
@@ -31,9 +31,11 @@ public class AlarmNotification extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        // 노티피케이션 클릭시 홈 액티비티로 이동하는 인텐트 설정
         Intent notificationIntent = new Intent(context, HomeActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+        // notificationBuilder에 포함될 pendingIntent 설정
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // 노티피케이션 설정
@@ -49,7 +51,7 @@ public class AlarmNotification extends BroadcastReceiver {
                 .setPriority(Notification.PRIORITY_MAX)
                 .setContentIntent(pendingIntent);
 
-        // 노티피케이션 채널 설정
+        // 노티피케이션 채널 설정 - 푸시 그룹들로 묶인 채널을 사용자가 받을지 안받을지 제어할 수 있도록 하는 역할
         channel = new NotificationChannel("default", channelName, importance);
         channel.setDescription(description);
 
@@ -67,6 +69,7 @@ public class AlarmNotification extends BroadcastReceiver {
             nextNotifyTime.add(Calendar.DATE, 1);
         }
 
+        // 알람 소리를 출력하는 서비스로 인텐트 전달
         Intent serviceIntent = new Intent(context, AlarmService.class);
         context.startForegroundService(serviceIntent);
     }
