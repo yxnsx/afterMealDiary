@@ -37,6 +37,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
     TextView textView_mealMateInfo;
     TextView textView_contactInfo;
     TextView textView_additionalInfo;
+    Button button_sendMessage;
     Button button_startPicker;
     Button button_stopPicker;
     LottieAnimationView lottie_confetti;
@@ -51,6 +52,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
     int index;
     boolean isRunning;
+    String phoneNumber;
     int PERMISSION_CONTACTS = 50;
 
 
@@ -64,22 +66,20 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         textView_mealMateInfo = findViewById(R.id.textView_mealMateInfo);
         textView_contactInfo = findViewById(R.id.textView_contactInfo);
         textView_additionalInfo = findViewById(R.id.textView_additionalInfo);
+        button_sendMessage = findViewById(R.id.button_sendMessage);
         button_startPicker = findViewById(R.id.button_startPicker);
         button_stopPicker = findViewById(R.id.button_stopPicker);
         lottie_confetti = findViewById(R.id.lottie_confetti);
         coordinatorLayout_snackBarHolder = findViewById(R.id.coordinatorLayout_snackBarHolder);
 
         imageButton_backArrow.setOnClickListener(this);
+        button_sendMessage.setOnClickListener(this);
         button_startPicker.setOnClickListener(this);
         button_stopPicker.setOnClickListener(this);
 
         // AsyncTask 상태를 제어하기 위한 boolean 값
         isRunning = false;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        button_sendMessage.setVisibility(View.GONE);
 
         // 퍼미션 요청 수락시
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
@@ -102,6 +102,13 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
 
+            case R.id.button_sendMessage:
+                Uri uri = Uri.parse("smsto:" + phoneNumber);
+                Log.d("디버깅", "MealMateActivity - onClick(): phoneNumber = " + phoneNumber);
+                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                startActivity(intent);
+                break;
+
             case R.id.button_startPicker:
 
                 if (contactDataArrayList != null) {
@@ -111,6 +118,9 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                     // 새로운 AsyncTask 생성 후 실행
                     mealMatePickerTask = new MealMatePickerTask();
                     mealMatePickerTask.execute();
+
+                    button_sendMessage.setVisibility(View.GONE);
+
                 } else {
                     Toast.makeText(this, "불러올 연락처 정보가 없습니다", Toast.LENGTH_SHORT).show();
                 }
@@ -123,6 +133,8 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                     lottie_confetti.setAnimation("confetti.json");
                     lottie_confetti.playAnimation();
                     mealMatePickerTask.cancel(true);
+
+                    button_sendMessage.setVisibility(View.VISIBLE);
 
                 } else { // AsyncTask가 null일 경우
                     Toast.makeText(this, "룰렛 시작하기 버튼을 먼저 눌러주세요", Toast.LENGTH_SHORT).show();
@@ -180,16 +192,17 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
 
                 contactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
                 if (contactCursor.moveToFirst()) {
 
-                    String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    String name = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                     ContactData contactData = new ContactData(name, contact);
 
                     Log.d("디버깅", "MealMateActivity - getContacts(): name = " + name);
+                    Log.d("디버깅", "MealMateActivity - getContacts(): contact = " + contact);
 
                     contactDataArrayList.add(contactData);
                 }
@@ -245,6 +258,8 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
             textView_mealMateInfo.setText("오늘 식사는");
             textView_contactInfo.setText(values[0].getName() + " 님과");
             textView_additionalInfo.setText("함께하면 어떨까요?");
+
+            phoneNumber = values[0].getPhoneNumber();
 
         }
 
