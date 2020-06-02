@@ -100,9 +100,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
+    protected void onStart() { super.onStart(); }
 
     @Override
     protected void onResume() {
@@ -110,8 +108,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -124,30 +122,34 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             // 이미지 추가 버튼 클릭시
             case R.id.imageView_addImage:
 
+                // 외부 저장소 접근을 허락했을 경우
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
+                    // 앨범에서 이미지를 선택해서 가져오는 인텐트 설정
                     Intent toAlbum = new Intent();
                     toAlbum.setAction(Intent.ACTION_OPEN_DOCUMENT); // ACTION_GET_CONTENT과의 차이점 무엇인지,,, ACTION_PICK은 사용하지 말것, deprecated + formally
                     toAlbum.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                     startActivityForResult(Intent.createChooser(toAlbum, "toAlbum"), REQUEST_ALBUM);
 
-                    Log.d("디버깅", "EditActivity - onClick(): 이미지 추가 버튼");
-
-                } else {
+                } else { // 외부 저장소 접근을 거부했을 경우
+                    // 퍼미션 요청하기
                     requestExternalStoragePermission();
                 }
                 break;
 
             // 작성완료 클릭시
             case R.id.button_savePost:
-                // 넘겨줄 데이터 값 설정
 
+                // 넘겨줄 데이터 값 설정
                 if (imageUri == null) {
+                    // 이미지 수정사항이 없을 경우 받아온 이미지 그대로 설정
                     postImage = intentImageUrl;
                 } else {
-                    postImage = imageUri.toString(); // 별도 패스 추출 메소드 사용하지 않고 .toString으로 넘겨주니 이미지 뜸..
+                    // 이미지 수정사항이 있을 경우 URI 값을 String으로 변환
+                    postImage = imageUri.toString();
                 }
 
+                // 포스트 객체 생성을 위한 값 추출
                 postDate = intentPostDate;
                 postTitle = editText_postTitle.getText().toString();
                 postText = editText_postText.getText().toString();
@@ -165,7 +167,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 onBackPressed();
-
                 finish();
                 break;
 
@@ -183,7 +184,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             if (resultCode == RESULT_OK) {
 
                 try {
-                    // 데이터 꺼내고 이미지뷰에 넣기
+                    // 데이터 꺼내고 이미지뷰에 표시하기
                     imageUri = data.getData();
                     imageView_addImage.setImageURI(imageUri);
                     Log.d("디버깅", "EditActivity - onActivityResult(): " + imageUri);
@@ -234,6 +235,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         // 퍼미션 체크 후 결과값 받아오기
         if (requestCode == PERMISSION_EXTERNAL_STORAGE) {
+
             // 권한 허용시
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getApplicationContext(), "권한이 허용되었습니다", Toast.LENGTH_SHORT).show();
@@ -256,6 +258,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     // 복구 생명 주기 : onCreate() -> onStart() -> onRestoreInstanceState() -> onResume()
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+
         // 작성 중이던 글 복구
         editText_postTitle.setText(savedInstanceState.getString(postTitle));
         editText_postText.setText(savedInstanceState.getString(postText));
@@ -266,6 +269,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     // 저장 생명 주기 : onPause() -> onSaveInstanceState() -> onStop() -> onDestroy()
     @Override
     public void onSaveInstanceState(Bundle outState) {
+
         // 작성 중이던 글 저장
         outState.putString(postText, String.valueOf(editText_postText.getText()));
         outState.putString(postTitle, String.valueOf(editText_postTitle.getText()));
@@ -281,15 +285,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             // 홈으로 되돌아가는 인텐트 설정
             Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intentHome);
-            Log.d("디버깅", "PostActivity - onBackPressed(): " + intentFrom);
 
-            // 넘어온 인텐트의 출처가 캘린더리스트 액티비티인 경우
-        } else if (intentFrom.equals("calendarList")) {
+        } else if (intentFrom.equals("calendarList")) { // 넘어온 인텐트의 출처가 캘린더리스트 액티비티인 경우
 
             // 캘린더 리스트로 되돌아가는 인텐트 설정
             Intent intentCalendarList = new Intent(getApplicationContext(), CalendarActivity.class);
             startActivity(intentCalendarList);
-            Log.d("디버깅", "PostActivity - onBackPressed(): " + intentFrom);
 
         } else {
             Log.d("디버깅", "PostActivity - onMenuItemClick(): 예외 발생");

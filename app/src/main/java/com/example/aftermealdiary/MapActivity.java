@@ -71,7 +71,6 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
 
     Location location;
-    Location currentLocation;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
     FusedLocationProviderClient locationProviderClient;
@@ -100,21 +99,25 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         button_setting.setOnClickListener(this);
         button_refresh.setOnClickListener(this);
 
+        // 마커 어레이리스트 설정
         previous_marker = new ArrayList<Marker>();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_mapView);
+        // 지도 표시할 프래그먼트 설정
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_mapView);
         mapFragment.getMapAsync(this);
 
+        // 위치 요청 설정
         locationRequest = new LocationRequest()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(MAXIMUM_UPDATE_INTERVAL)
-                .setFastestInterval(MINIMUM_UPDATE_INTERVAL);
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY) // 정확도를 최우선으로 고려
+                .setInterval(MAXIMUM_UPDATE_INTERVAL) // 위치 업데이트 간격 설정 (3초)
+                .setFastestInterval(MINIMUM_UPDATE_INTERVAL); // 위치 업데이트 간격 설정 (1초)
 
+        // 생성한 위치 요청 추가
         LocationSettingsRequest.Builder builder =
                 new LocationSettingsRequest.Builder();
         builder.addLocationRequest(locationRequest);
 
+        // 위치정보를 가져오는 FusedLocationProviderClient 설정
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
@@ -122,12 +125,11 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     protected void onStart() {
         super.onStart();
 
+        // 펴미션이 허용되지 않은 상태일 경우
         if (!checkPermissions()) {
+            // 퍼미션 요청
             requestPermissions();
         }
-
-        //locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //createLocationRequest();
     }
 
     @Override
@@ -150,6 +152,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 overridePendingTransition(0, 0);
                 break;
 
+            // 지도 버튼을 클릭했을 경우
             case R.id.button_map:
                 Intent intentMap = new Intent(this, MapActivity.class);
                 startActivity(intentMap);
@@ -165,50 +168,50 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 overridePendingTransition(0, 0);
                 break;
 
+            // 재검색 버튼을 클릭했을 경우
             case R.id.button_refresh:
                 showPlaceInformation(currentPosition);
         }
     }
 
-    @Override
+    @Override // 지도가 준비되었을 때 자동으로 실행되는 콜백 메서드
     public void onMapReady(GoogleMap map) {
+
         googleMap = map;
-        setDefaultLocation();
+        setDefaultLocation(); // 서울로 디폴트 위치 지정
 
-        if (checkPermissions()) {
-
-
-        } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
-
+        // 펴미션이 허용되지 않은 상태일 경우
+        if (!checkPermissions()) {
+            // 퍼미션 요청
             requestPermissions();
         }
 
+        // 위치 업데이트 요청을 위한 LocationCallback 설정
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
 
+                // 위치정보 가져오기
                 List<Location> locationList = locationResult.getLocations();
 
+                // 가져온 위치정보가 있을 경우
                 if (locationList.size() > 0) {
+
+                    // 리스트에서 위치정보 가져오기
                     location = locationList.get(locationList.size() - 1);
-                    //location = locationList.get(0);
 
-                    currentPosition
-                            = new LatLng(location.getLatitude(), location.getLongitude());
-
-
+                    // 가져온 위치정보 바탕으로 마커 표시
                     String markerTitle = getCurrentAddress(currentPosition);
-                    String markerSnippet = "위도:" + String.valueOf(location.getLatitude())
-                            + " 경도:" + String.valueOf(location.getLongitude());
+                    String markerSnippet = "위도:" + location.getLatitude() + " 경도:" + location.getLongitude();
 
-                    //현재 위치에 마커 생성하고 이동
+                    // 현재 위치에 마커 생성
                     setCurrentLocation(location, markerTitle, markerSnippet);
 
-                    currentLocation = location;
+                    // 가져온 위치정보 바탕으로 현재 위치 지정
+                    currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                    showPlaceInformation(currentPosition);
                 }
-
-
             }
         };
         startLocationUpdates();
@@ -503,8 +506,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    public void showPlaceInformation(LatLng location)
-    {
+    public void showPlaceInformation(LatLng location) {
         googleMap.clear();//지도 클리어
 
         if (previous_marker != null)

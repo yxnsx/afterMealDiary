@@ -35,6 +35,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     Button button_setting;
     ListView listView_calendar;
 
+    Date currentDate;
     CalendarAdapter calendarAdapter;
     ArrayList<PostData> postDataForCalendar;
     ArrayList<PostData> postDataForEvent;
@@ -62,9 +63,9 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         listView_calendar.setOnItemClickListener(this);
 
         // 캘린더뷰 설정
-        compactCalendarView.setUseThreeLetterAbbreviation(true);
-        compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
         compactCalendarView.setListener(this);
+        compactCalendarView.setFirstDayOfWeek(Calendar.SUNDAY);
+        compactCalendarView.setUseThreeLetterAbbreviation(true); // 각 날짜에 점으로 포스트 개수 표시
     }
 
     @Override
@@ -76,21 +77,16 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
 
-        try {
-            setEvents();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        // 현재 날짜 정보 가져오기
+        currentDate = new Date();
 
-        Date currentDate = new Date();
+        // 달력 상단의 월 표시에 출력할 날짜 포맷 지정
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat calendarInfoFormatter = new SimpleDateFormat("yyyy/MM");
         String calendarInfo = calendarInfoFormatter.format(currentDate);
-
         textView_calendarInfo.setText(calendarInfo);
 
+        // 각 날짜에 해당하는 포스트 객체를 가져오기 위한 날짜 포맷 지정
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
         String selectedDate = formatter.format(currentDate);
@@ -99,6 +95,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         postDataForCalendar = new ArrayList<>();
 
         try {
+            // 지정한 날짜 포맷에 해당하는 postDataArrayList 값 가져오기
             postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
 
         } catch (JSONException e) {
@@ -108,8 +105,15 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         // 리스트뷰 데이터 변동 반영 - 구조변경, 아이템변경 둘 다 포함
         calendarAdapter = new CalendarAdapter(getApplicationContext(), postDataForCalendar);
         calendarAdapter.notifyDataSetChanged();
-
         listView_calendar.setAdapter(calendarAdapter);
+
+        try {
+            setPostEvents(); // 달력에 포스트 개수 표시
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -148,6 +152,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                 overridePendingTransition(0, 0);
                 break;
 
+            // 지도 버튼을 클릭했을 경우
             case R.id.button_map:
                 Intent intentMap = new Intent(this, MapActivity.class);
                 startActivity(intentMap);
@@ -171,23 +176,22 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         overridePendingTransition(0, 0);
     }
 
-    public void setEvents() throws JSONException, ParseException {
+    public void setPostEvents() throws JSONException, ParseException {
 
+        // 전체 포스트 데이터 가져오기
         postDataForEvent = PostData.getArrayListFromSharedPreferences(getApplicationContext());
 
-        for(int i = 0; i < postDataForEvent.size(); i++) {
-
+        for (int i = 0; i < postDataForEvent.size(); i++) {
             PostData postData = postDataForEvent.get(i);
 
+            // 이벤트 객체 생성을 위해 Date를 long으로 변환
             @SuppressLint("SimpleDateFormat")
             Date postDate = new SimpleDateFormat("yy/MM/dd").parse(postData.getPostDate());
-
             long postDateTime = postDate.getTime();
 
+            // 이벤트 객체 생성 후 뷰에 추가
             Event postEvent = new Event(R.color.colorAccent, postDateTime, "");
             compactCalendarView.addEvent(postEvent);
-
-            Log.d("디버깅", "CalendarActivity - setEvents(): postData " + i + " 추가됨");
         }
     }
 
@@ -195,10 +199,12 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     @SuppressLint("SimpleDateFormat")
     public void onDayClick(Date dateClicked) {
 
+        // 선택한 날짜에 해당하는 포스트를 가져오기 위해 SimpleDateFormat을 String으로 변환
         SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
         String selectedDate = formatter.format(dateClicked);
 
         try {
+            // 선택한 날짜에 해당하는 포스트 어레이리스트 생성
             postDataForCalendar = PostData.getDateArrayFromSharedPreferences(getApplicationContext(), selectedDate);
             Log.d("디버깅", "CalendarActivity - onDayClick(): postDataForCalendar = " + postDataForCalendar.size());
 
@@ -209,28 +215,25 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         // 리스트뷰 데이터 변동 반영 - 구조변경, 아이템변경 둘 다 포함
         calendarAdapter = new CalendarAdapter(getApplicationContext(), postDataForCalendar);
         calendarAdapter.notifyDataSetChanged();
-
         listView_calendar.setAdapter(calendarAdapter);
-
-        // todo 이벤트 개수 표시
-        Log.d("디버깅", "CalendarActivity - onDayClick(): date = " + selectedDate);
-
     }
 
     @Override
     @SuppressLint("SimpleDateFormat")
-    public void onMonthScroll(Date firstDayOfNewMonth) {
+    public void onMonthScroll(Date dayOfMonth) {
 
+        // 달력 상단의 월 표시에 출력할 날짜 포맷 지정
         SimpleDateFormat calendarInfoFormatter = new SimpleDateFormat("yyyy/MM");
-        String calendarInfo = calendarInfoFormatter.format(firstDayOfNewMonth);
-
+        String calendarInfo = calendarInfoFormatter.format(dayOfMonth);
         textView_calendarInfo.setText(calendarInfo);
 
-        onDayClick(firstDayOfNewMonth);
+        onDayClick(dayOfMonth);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        // 어떤 포스트 객체를 클릭했는지 알려주기 위한 인텐트 설정
         Intent intentPost = new Intent(this, PostActivity.class);
         intentPost.putExtra("intentFrom", "calendarList");
         intentPost.putExtra("selectedPost", postDataForCalendar.get(position));

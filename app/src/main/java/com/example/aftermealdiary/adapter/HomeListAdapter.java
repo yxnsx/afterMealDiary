@@ -70,7 +70,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.HomeRe
         // sharedPreferences에 저장된 arrayList 값 불러오기
         postDataArrayList = PostData.getArrayListFromSharedPreferences(context);
         Log.d("디버깅", "HomeListAdapter - addPost(): postDataArrayList = " + postDataArrayList.size());
-
         // 추가한 데이터 값 반영
         postDataArrayList.add(0, postData);
         notifyItemInserted(0);
@@ -110,6 +109,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.HomeRe
 
         // arrayList의 아이템 개수만큼
         for (int i = 0; i < postDataArrayList.size(); i++) {
+
             // JSONObject 생성
             JSONObject postJSONObject = new JSONObject();
 

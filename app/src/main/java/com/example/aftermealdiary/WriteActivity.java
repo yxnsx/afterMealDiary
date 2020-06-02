@@ -58,6 +58,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     Uri imageUri;
     int PERMISSION_EXTERNAL_STORAGE = 10;
 
+
     // 레이아웃 리소스 파일 세팅과 변수 초기화 작업 수행
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +109,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
                     // 이미지 가져오는 암시적 인텐트 생성
-                    // TODO ACTION_OPEN_DOCUMENT와 ACTION_GET_CONTENT과의 차이점 + ACTION_PICK은 사용하면 안되는 이유
                     Intent toAlbum = new Intent();
                     toAlbum.setAction(Intent.ACTION_OPEN_DOCUMENT);
                     toAlbum.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -124,8 +124,9 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
             // 작성완료 클릭시
             case R.id.button_savePost:
+
                 // Post 데이터 값 설정
-                postImage = imageUri.toString(); // 별도 패스 추출 메소드 사용하지 않고 .toString으로 넘겨주니 이미지 뜸..
+                postImage = imageUri.toString();
                 postDate = new SimpleDateFormat("yy/MM/dd", Locale.getDefault()).format(date);
                 postTitle = editText_postTitle.getText().toString();
                 postText = editText_postText.getText().toString();
@@ -148,8 +149,6 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
                 // 게시글 작성 후 홈 액티비티로 이동
                 Intent intentPost = new Intent(getApplicationContext(), HomeActivity.class);
-                /*intentPost.putExtra("selectedPost", homeListAdapter.getPost(0));
-                intentPost.putExtra("position", 0);*/
                 startActivity(intentPost);
 
                 finish();
@@ -214,7 +213,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
                     })
                     .create().show();
 
-        } else { // TODO 이 부분 알아보기
+        } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_EXTERNAL_STORAGE);
         }
     }
@@ -225,13 +224,14 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         // 퍼미션 체크 후 결과값 받아오기
         if (requestCode == PERMISSION_EXTERNAL_STORAGE) {
+
             // 권한 허용시
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "권한이 허용되었습니다", Toast.LENGTH_SHORT).show();
 
-                // 이미지를 가져오는 암시적 인텐트
+                // 이미지를 가져오는 암시적 인텐트 생성
                 Intent toAlbum = new Intent();
-                toAlbum.setAction(Intent.ACTION_OPEN_DOCUMENT); // 에러 발생할 경우 ACTION_GET_CONTENT로 바꿔보기..
+                toAlbum.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 toAlbum.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 startActivityForResult(Intent.createChooser(toAlbum, "toAlbum"), REQUEST_ALBUM);
 

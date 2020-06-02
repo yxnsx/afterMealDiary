@@ -6,8 +6,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import androidx.preference.PreferenceManager;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -132,12 +130,12 @@ public class PostData implements Parcelable {
     }
 
     public static ArrayList<PostData> getDateArrayFromSharedPreferences(Context context, String selectedDate) throws JSONException {
+
         // SharedPreferences 객체 생성
         postSharedPreferences = context.getSharedPreferences("POST_DATA", Context.MODE_PRIVATE);
         ArrayList<PostData> postDataForCalendar = new ArrayList<>();
 
         // SharedPreferences에서 JSONArray 받아오기
-
         JSONArray postJSONArray = new JSONArray(postSharedPreferences.getString("postData", "0"));
 
         // 받아온 JSONArray에서 position 값으로 JSONObject 생성

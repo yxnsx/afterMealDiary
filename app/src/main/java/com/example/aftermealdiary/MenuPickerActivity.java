@@ -1,7 +1,5 @@
 package com.example.aftermealdiary;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -14,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.aftermealdiary.item.MenuData;
@@ -59,7 +59,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         button_startPicker.setOnClickListener(this);
         button_stopPicker.setOnClickListener(this);
 
-        // AsyncTask 상태를 제어하기 위한 boolean 값
+        // AsyncTask 상태를 제어하기 위한 boolean 값 설정
         isRunning = false;
 
         // 메뉴 룰렛에 사용할 메뉴 어레이리스트 값 설정
@@ -78,28 +78,37 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
 
         switch (v.getId()) {
 
+            // 뒤로가기 버튼 클릭시
             case R.id.imageButton_backArrow:
                 onBackPressed();
                 break;
 
+            // 룰렛 시작하기 버튼 클릭시
             case R.id.button_startPicker:
 
-                // AsyncTask 상태를 제어하기 위한 boolean 값
+                // AsyncTask 상태를 제어하기 위한 boolean 값 설정
                 isRunning = true;
 
-                // 새로운 AsyncTask 생성 후 실행
+                // 메뉴를 뽑는 AsyncTask 생성 후 실행
                 menuPickerTask = new MenuPickerTask();
                 menuPickerTask.execute();
                 break;
 
+            // 룰렛 멈추기 버튼 클릭시
             case R.id.button_stopPicker:
 
-                // AsyncTask가 생성된 상태일 경우
+                // 메뉴를 뽑는 AsyncTask가 생성된 상태일 경우
                 if (menuPickerTask != null) {
+
+                    // AsyncTask 상태를 제어하기 위한 boolean 값 설정
                     isRunning = false;
+
+                    // 메뉴를 뽑는 AsyncTask 생성 후 중지
+                    menuPickerTask.cancel(true);
+
+                    // 애니메이션 재생
                     lottie_confetti.setAnimation("confetti.json");
                     lottie_confetti.playAnimation();
-                    menuPickerTask.cancel(true);
 
                 } else { // AsyncTask가 null일 경우
                     Toast.makeText(this, "룰렛 시작하기 버튼을 먼저 눌러주세요", Toast.LENGTH_SHORT).show();
@@ -119,7 +128,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
         // AsyncTask가 생성된 상태일 경우
         if (menuPickerTask != null) {
 
-            // AsyncTask 상태를 제어하기 위한 boolean 값
+            // AsyncTask 상태를 제어하기 위한 boolean 값 설정
             isRunning = false;
             menuPickerTask.cancel(true);
         }
@@ -193,6 +202,7 @@ public class MenuPickerActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
 
+                // index값이 menuDataArrayList 최대값과 같다면 0으로 초기화해서 다시 while문을 돌 수 있도록 함
                 if (index == menuDataArrayList.size()) {
                     index = 0;
                 }
