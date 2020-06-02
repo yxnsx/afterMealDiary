@@ -9,6 +9,10 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.aftermealdiary.item.ContactData;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MealMateActivity extends AppCompatActivity implements View.OnClickListener {
@@ -18,7 +22,8 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
     Cursor cursor;
     Cursor contactCursor;
-    HashMap<String, String> contactHashMap;
+    ArrayList<ContactData> contactDataArrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,25 +48,23 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
     private void getContacts() {
         cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+        contactDataArrayList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            contactHashMap = new HashMap<String, String>();
-
             String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
 
-            contactHashMap.put("name", name);
-
             contactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
-
             if (contactCursor.moveToFirst()) {
+
                 String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                contactHashMap.put("contact", contact);
+
+                ContactData contactData = new ContactData(name, contact);
+                contactDataArrayList.add(contactData);
             }
 
             contactCursor.close();
         }
         cursor.close();
-
     }
 }
