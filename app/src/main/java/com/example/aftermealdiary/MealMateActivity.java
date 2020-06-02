@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.aftermealdiary.item.ContactData;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
     TextView textView_additionalInfo;
     Button button_startPicker;
     Button button_stopPicker;
+    LottieAnimationView lottie_confetti;
 
     Cursor cursor;
     Cursor contactCursor;
@@ -80,6 +82,8 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                 // AsyncTask가 생성된 상태일 경우
                 if (mealMatePickerTask != null) {
                     isRunning = false;
+                    lottie_confetti.setAnimation("confetti.json");
+                    lottie_confetti.playAnimation();
                     mealMatePickerTask.cancel(true);
 
                 } else { // AsyncTask가 null일 경우
