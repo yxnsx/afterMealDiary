@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -61,6 +60,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mealmate);
 
+        // 레이아웃 리소스 설정
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
         imageView_image = findViewById(R.id.imageView_image);
         textView_mealMateInfo = findViewById(R.id.textView_mealMateInfo);
@@ -72,64 +72,53 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         lottie_confetti = findViewById(R.id.lottie_confetti);
         coordinatorLayout_snackBarHolder = findViewById(R.id.coordinatorLayout_snackBarHolder);
 
+        // 클릭리스너 설정
         imageButton_backArrow.setOnClickListener(this);
         button_sendMessage.setOnClickListener(this);
         button_startPicker.setOnClickListener(this);
         button_stopPicker.setOnClickListener(this);
 
-        // AsyncTask 상태를 제어하기 위한 boolean 값
+        // AsyncTask 상태를 제어하기 위한 boolean 값 설정
         isRunning = false;
+
+        // 메시지 보내기 버튼 안보이도록 설정
         button_sendMessage.setVisibility(View.GONE);
 
-        // 퍼미션 요청 수락시
+        // 연락처 접근 퍼미션 요청 수락시
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            // 새로운 AsyncTask 생성 후 실행
+            // 연락처 가져오는 AsyncTask 생성 후 실행
             contactsTask = new ContactsTask();
             contactsTask.execute();
 
         } else { // 퍼미션 요청 거절시
             // 퍼미션 재요청
             ActivityCompat.requestPermissions(MealMateActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_CONTACTS);
-            Log.d("디버깅", "MealMateActivity - onStart(): requestContactsPermission");
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
+            // 뒤로가기 버튼 클릭시
             case R.id.imageButton_backArrow:
                 onBackPressed();
                 break;
 
-            case R.id.button_sendMessage:
-                Uri uri = Uri.parse("smsto:" + phoneNumber);
-                Log.d("디버깅", "MealMateActivity - onClick(): phoneNumber = " + phoneNumber);
-                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-                startActivity(intent);
-                break;
-
+            // 룰렛 시작하기 버튼 클릭시
             case R.id.button_startPicker:
 
+                // 연락처 값이 null이 아닐 경우
                 if (contactDataArrayList != null) {
+
                     // AsyncTask 상태를 제어하기 위한 boolean 값
                     isRunning = true;
 
-                    // 새로운 AsyncTask 생성 후 실행
+                    // 식사 메이트를 뽑는 AsyncTask 생성 후 실행
                     mealMatePickerTask = new MealMatePickerTask();
                     mealMatePickerTask.execute();
 
+                    // 메시지 보내기 버튼 안보이도록 설정
                     button_sendMessage.setVisibility(View.GONE);
 
                 } else {
@@ -137,37 +126,56 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
 
+            // 룰렛 멈추기 버튼 클릭시
             case R.id.button_stopPicker:
+
                 // AsyncTask가 생성된 상태일 경우
                 if (mealMatePickerTask != null) {
+
+                    // AsyncTask 상태를 제어하기 위한 boolean 값
                     isRunning = false;
-                    lottie_confetti.setAnimation("confetti.json");
-                    lottie_confetti.playAnimation();
+
+                    // 식사 메이트를 뽑는 AsyncTask 중지
                     mealMatePickerTask.cancel(true);
 
+                    // 애니메이션 재생
+                    lottie_confetti.setAnimation("confetti.json");
+                    lottie_confetti.playAnimation();
+
+                    // 메시지 보내기 버튼 보이도록 설정
                     button_sendMessage.setVisibility(View.VISIBLE);
 
                 } else { // AsyncTask가 null일 경우
                     Toast.makeText(this, "룰렛 시작하기 버튼을 먼저 눌러주세요", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            // 문자로 연락하기 버튼 클릭시
+            case R.id.button_sendMessage:
+
+                // 해당 연락처로 문자 보내는 인텐트 설정
+                Uri uri = Uri.parse("smsto:" + phoneNumber);
+                Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+                startActivity(intent);
+                break;
+
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if (requestCode == PERMISSION_CONTACTS) {
+
             // 퍼미션을 허용했을 경우
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 새로운 AsyncTask 생성 후 실행
+
+                // 연락처 가져오는 AsyncTask 생성 후 실행
                 contactsTask = new ContactsTask();
                 contactsTask.execute();
 
-            } else {
-                // todo 여기 조건이 잘못되어서 계속 액티비티 생성과 동시에 스낵바 뜨는듯
-                Snackbar.make(
+            } else { // 퍼미션을 거절했을 경우
+                Snackbar.make( // 스낵바 생성
                         coordinatorLayout_snackBarHolder,
                         "식사 메이트 뽑기를 위해서는 \n연락처 접근 권한이 필요합니다",
                         Snackbar.LENGTH_INDEFINITE)
@@ -175,6 +183,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onClick(View view) {
 
+                                // 앱 설정으로 이동하는 인텐트 설정
                                 Intent intent = new Intent();
                                 intent.setAction(
                                         Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -200,25 +209,26 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected ArrayList doInBackground(ArrayList... arrayLists) {
+
+            // 연락처를 탐색해서 가져오는 커서 설정
             cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
 
             while (cursor.moveToNext()) {
+                // id값 가져오기
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
+                // 가져온 id값을 바탕으로 연락처 가져오기
                 contactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
                 if (contactCursor.moveToFirst()) {
 
+                    // 이름과 연락처 가져와서 새 ContactData 객체 생성
                     String name = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     String contact = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
                     ContactData contactData = new ContactData(name, contact);
 
-                    Log.d("디버깅", "MealMateActivity - getContacts(): name = " + name);
-                    Log.d("디버깅", "MealMateActivity - getContacts(): contact = " + contact);
-
+                    // 생성한 contactData 객체를 어레이리스트에 추가
                     contactDataArrayList.add(contactData);
                 }
-
                 contactCursor.close();
             }
             cursor.close();
@@ -237,6 +247,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         @Override // 스레드의 백그라운드 작업 구현
         protected ContactData doInBackground(Integer... integers) {
 
+            // contactDataArrayList의 크기만큼 반복
             while (index < contactDataArrayList.size()) {
 
                 try {
@@ -252,6 +263,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
                     e.printStackTrace();
                 }
 
+                // index값이 contactDataArrayList 최대값과 같아면 0으로 초기화해서 다시 while문을 돌 수 있도록 함
                 if (index == contactDataArrayList.size()) {
                     index = 0;
                 }
@@ -266,11 +278,11 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
             super.onProgressUpdate(values);
 
             // 얻은 데이터 바탕으로 레이아웃 리소스 재설정
-            //imageView_menuImage.setBackground(values[0].getMenuIcon());
             textView_mealMateInfo.setText("오늘 식사는");
             textView_contactInfo.setText(values[0].getName() + " 님과");
             textView_additionalInfo.setText("함께하면 어떨까요?");
 
+            // 문자로 연락하기 버튼으로 넘겨줄 연락처 정보 추출
             phoneNumber = values[0].getPhoneNumber();
 
         }
