@@ -17,7 +17,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     TextView textView_menuPicker;
     TextView textView_alarm;
-    TextView textView_recipeInfo;
+    TextView textView_mealMate;
     TextView textView_sendOpinion;
     TextView textView_setting;
 
@@ -35,7 +35,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         // 레이아웃 리소스
         textView_menuPicker = findViewById(R.id.textView_menuPicker);
         textView_alarm = findViewById(R.id.textView_alarm);
-        textView_recipeInfo = findViewById(R.id.textView_recipeInfo);
+        textView_mealMate = findViewById(R.id.textView_mealMate);
         textView_sendOpinion = findViewById(R.id.textView_sendOpinion);
         textView_setting = findViewById(R.id.textView_setting);
 
@@ -47,7 +47,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         // 클릭리스너 설정
         textView_menuPicker.setOnClickListener(this);
         textView_alarm.setOnClickListener(this);
-        textView_recipeInfo.setOnClickListener(this);
+        textView_mealMate.setOnClickListener(this);
         textView_sendOpinion.setOnClickListener(this);
         textView_setting.setOnClickListener(this);
 
