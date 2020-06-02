@@ -12,8 +12,6 @@ public class RecipeInfoActivity extends AppCompatActivity implements View.OnClic
     ImageButton imageButton_backArrow;
     ListView listView_recipeInfo;
 
-    String key = "bfe27fe32dde406c8969";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
