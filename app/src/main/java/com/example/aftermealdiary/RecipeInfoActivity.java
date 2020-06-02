@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class NutrientInfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class RecipeInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton imageButton_backArrow;
     ListView listview_nutrientInfo;

@@ -93,7 +93,7 @@
         <activity
             android:name=".AlarmActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".NutrientInfoActivity"
+        <activity android:name=".RecipeInfoActivity"
             android:launchMode="singleTop"/>
     </application>
 
