@@ -15,7 +15,6 @@ public class AlarmService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -23,6 +22,7 @@ public class AlarmService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        // 알람 소리 재생
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
         mediaPlayer.start();
     }
