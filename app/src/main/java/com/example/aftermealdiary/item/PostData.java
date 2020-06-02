@@ -130,7 +130,7 @@ public class PostData implements Parcelable {
     }
 
     public static ArrayList<PostData> getDateArrayFromSharedPreferences(Context context, String selectedDate) throws JSONException {
-        
+
         // SharedPreferences 객체 생성
         postSharedPreferences = context.getSharedPreferences("POST_DATA", Context.MODE_PRIVATE);
         ArrayList<PostData> postDataForCalendar = new ArrayList<>();

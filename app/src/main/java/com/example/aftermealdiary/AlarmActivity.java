@@ -103,6 +103,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
         switch (v.getId()) {
 
+            // 뒤로가기 버튼 클릭시
             case R.id.imageButton_backArrow:
                 onBackPressed();
                 break;
@@ -110,7 +111,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             // 알람 저장하기 버튼 클릭시
             case R.id.button_setAlarm:
 
-                // 알람 데이터 얻기 (시, 분)
+                // 알람 데이터 얻기 (alarmHour, alarmMinute, alarmInfo)
                 if (Build.VERSION.SDK_INT >= 23) {
                     alarmHour = timePicker.getHour();
                     alarmMinute = timePicker.getMinute();
@@ -119,12 +120,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
                     alarmHour = timePicker.getCurrentHour();
                     alarmMinute = timePicker.getCurrentMinute();
                 }
-                // 토스트 메시지 출력
-                Toast.makeText(getApplicationContext(), alarmHour + "시 " + alarmMinute + "분에 식사 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
-
-                // 알람 데이터 얻기 (알람정보) + editText_alarmInfo 초기화
                 alarmInfo = editText_alarmInfo.getText().toString();
-                editText_alarmInfo.setText("");
 
                 // 얻은 데이터 바탕으로 새 알람데이터 객체 생성
                 AlarmData alarmData = new AlarmData(Integer.toString(alarmHour), Integer.toString(alarmMinute), alarmInfo);
@@ -139,8 +135,12 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
                 // 갱신한 데이터 바탕으로 알람 업데이트
                 updateAlarmManager();
 
-                // 알람 저장 후 키보드 숨기기
+                // 알람 설정을 알리는 토스트 메시지 출력
+                Toast.makeText(getApplicationContext(), alarmHour + "시 " + alarmMinute + "분에 식사 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
+
+                // 알람 저장 후 키보드 숨기기, editText_alarmInfo 초기화
                 hideKeyboard(this);
+                editText_alarmInfo.setText("");
 
                 break;
         }
@@ -149,7 +149,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
-        // 삭제 여부 다이얼로그 설정
+        // 알람 삭제 여부 다이얼로그 설정
         new AlertDialog.Builder(this)
                 .setTitle("식사 알람 삭제")
                 .setMessage("알람을 삭제하시겠습니까?")
@@ -181,6 +181,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
                     }
                 })
                 .create().show();
+
         return true;
     }
 
@@ -216,7 +217,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             // 알람매니저 설정
             setAlarmManager(alarmTime, alarmIndex);
         }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
