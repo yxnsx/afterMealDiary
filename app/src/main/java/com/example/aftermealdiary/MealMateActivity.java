@@ -61,6 +61,7 @@ public class MealMateActivity extends AppCompatActivity implements View.OnClickL
         textView_additionalInfo = findViewById(R.id.textView_additionalInfo);
         button_startPicker = findViewById(R.id.button_startPicker);
         button_stopPicker = findViewById(R.id.button_stopPicker);
+        lottie_confetti = findViewById(R.id.lottie_confetti);
 
         imageButton_backArrow.setOnClickListener(this);
         button_startPicker.setOnClickListener(this);
