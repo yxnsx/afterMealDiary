@@ -109,7 +109,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.HomeRe
 
         // arrayList의 아이템 개수만큼
         for (int i = 0; i < postDataArrayList.size(); i++) {
-            
+
             // JSONObject 생성
             JSONObject postJSONObject = new JSONObject();
 
