@@ -18,7 +18,7 @@ public class NutrientInfoActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nutrient_info);
+        setContentView(R.layout.activity_recipeinfo);
 
         imageButton_backArrow = findViewById(R.id.imageButton_backArrow);
         listview_nutrientInfo = findViewById(R.id.listview_nutrientInfo);
