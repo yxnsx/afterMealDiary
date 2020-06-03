@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -167,7 +168,14 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
             // 내 주변 음식점 보기 버튼을 클릭했을 경우
             case R.id.button_refresh:
-                showPlaceInformation(currentPosition);
+                // 현재 위치가 지정되지 않은 경우
+                if (currentPosition == null) {
+                    Toast.makeText(MapActivity.this, "현재 위치를 찾을 수 없습니다", Toast.LENGTH_SHORT).show();
+
+                } else { // 현재 위치가 지정된 경우
+                    // 현재 위치를 기반으로 장소 검색
+                    showPlaceInformation(currentPosition);
+                }
                 break;
         }
     }
