@@ -85,7 +85,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // 레이아웃 리소스 
+        // 레이아웃 리소스
         button_home = findViewById(R.id.button_home);
         button_calendar = findViewById(R.id.button_calendar);
         button_map = findViewById(R.id.button_map);

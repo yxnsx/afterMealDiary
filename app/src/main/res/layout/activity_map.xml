@@ -55,7 +55,7 @@
             android:layout_width="210dp"
             android:layout_height="40dp"
             android:background="@drawable/round_rectangle_green_line"
-            android:text="이 위치에서 재검색하기"
+            android:text="주변 음식점 보기"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
             android:fontFamily="@font/spoqa_han_sans_regular"
