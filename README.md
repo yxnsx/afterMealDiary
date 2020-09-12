@@ -1,13 +1,25 @@
 # afterMealDiary
 먹은 음식과 그에 대한 후기를 기록하고, 캘린더뷰를 통해 한눈에 볼 수 있는 기능을 제공합니다.</br>
 구글 지도를 통해 사용자의 위치를 기반으로 주변의 음식점 정보도 제공할 수 있도록 했습니다.</br>
-(영상: <https://vimeo.com/456448876>)</br></br>
+(영상: <https://vimeo.com/456448876>)
+</br></br>
+
+
+## 스크린샷
+![afterMealDiary_screenShots 001](https://user-images.githubusercontent.com/47806943/92987948-366bde00-f502-11ea-9720-27d05191ac49.jpeg)
+![afterMealDiary_screenShots 002](https://user-images.githubusercontent.com/47806943/92987951-3b309200-f502-11ea-9842-088b338263cb.jpeg)
+
+
+## 라이브러리/APIs
+* lottie (https://github.com/airbnb/lottie-android)</br>
+* CompactCalendarView (https://github.com/SundeepK/CompactCalendarView)</br>
+* Google Maps API
+</br></br>
 
 
 ## 주요 기능
 **1. 스플래시 화면**</br>
 &nbsp;&nbsp;&nbsp; lottie를 이용하여 스플래시 애니메이션 화면을 구현했습니다.</br>
-&nbsp;&nbsp;&nbsp; (사용 라이브러리: <https://github.com/airbnb/lottie-android>)
 
 **2. 상단 배너**</br>
 &nbsp;&nbsp;&nbsp; 3초마다 상단 배너가 바뀌며 각 배너마다 다른 활동으로 연결됩니다.</br>
@@ -27,11 +39,9 @@
 &nbsp;&nbsp;&nbsp; 캘린더 탭에서 상단 캘린더뷰를 통해 각 일자별 작성된 글의 개수를 볼 수 있습니다.</br>
 &nbsp;&nbsp;&nbsp; 각 날짜를 클릭하면 그 날 작성한 글이 하단 리스트뷰에 보여지며 </br>
 &nbsp;&nbsp;&nbsp; 각 글을 클릭하면 글 상세보기 페이지로 이동합니다.</br>
-&nbsp;&nbsp;&nbsp; (사용 라이브러리: <https://github.com/SundeepK/CompactCalendarView>)
 
 **5. 주변 음식점 지도**</br>
 &nbsp;&nbsp;&nbsp; 지도 탭에서 현재 위치를 기반으로 주변의 음식점 정보를 볼 수 있습니다.</br>
-&nbsp;&nbsp;&nbsp; (사용 API: Google Maps Api)
 
 **6. 식사 알람 설정하기**</br>
 &nbsp;&nbsp;&nbsp; 설정 탭의 식사 알람 설정하기로 들어가면 식사 알람을 설정할 수 있습니다.</br>
